@@ -1,0 +1,8 @@
+---
+description: documentation rules for FastAPI AI starter
+alwaysApply: true
+---
+
+# documentation
+
+Follow AGENTS.md. Keep routers thin. Use AIProvider abstraction. Update docs/tests when behavior changes.

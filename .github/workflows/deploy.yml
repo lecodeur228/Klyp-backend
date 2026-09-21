@@ -1,0 +1,14 @@
+# Placeholder deploy workflow — wire to your hosting provider.
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Documented placeholder
+        run: |
+          echo "Configure deployment for your platform (Docker image, migrate, restart workers)."
+          echo "See docs/deployment.md"

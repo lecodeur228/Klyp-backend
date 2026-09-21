@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[oc]
+*.egg-info
+build/
+dist/
+wheels/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+
+# Env & secrets
+.env
+.env.local
+!.env.example
+
+# Runtime
+storage/uploads/*
+!storage/uploads/.gitkeep
+*.db
+*.sqlite3
+
+# IDE / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Docker
+*.log

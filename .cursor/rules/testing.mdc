@@ -1,0 +1,8 @@
+---
+description: testing rules for FastAPI AI starter
+alwaysApply: true
+---
+
+# testing
+
+Follow AGENTS.md. Keep routers thin. Use AIProvider abstraction. Update docs/tests when behavior changes.
