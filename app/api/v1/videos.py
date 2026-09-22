@@ -8,6 +8,7 @@ from app.i18n.messages import translate
 from app.schemas.captions import CaptionsGenerateRequest, CaptionsPatchRequest
 from app.schemas.editplan import (
     AiEditRequest,
+    CreativePlanOverlayAddRequest,
     CreativePlanStartRequest,
     CreativePlanValidateRequest,
 )
@@ -236,4 +237,53 @@ async def validate_creative_plan(
     return success_response(
         payload.model_dump(mode="json"),
         translate("creative_plan_validated", locale),
+    )
+
+
+@router.post("/videos/{video_id}/creative-plan/overlays", status_code=201)
+async def add_creative_overlay(
+    video_id: str,
+    body: CreativePlanOverlayAddRequest,
+    session: DbSession,
+    user: CurrentUser,
+    locale: LocaleDep,
+    settings: AppSettings,
+):
+    payload = await creative_service.add_creative_overlay(
+        session,
+        user_id=user.id,
+        video_id=video_id,
+        body=body,
+        settings=settings,
+    )
+    return success_response(
+        payload.model_dump(mode="json"),
+        translate("ok", locale),
+        status_code=201,
+    )
+
+
+@router.post("/videos/{video_id}/media", status_code=201)
+async def upload_video_media(
+    video_id: str,
+    session: DbSession,
+    user: CurrentUser,
+    locale: LocaleDep,
+    settings: AppSettings,
+    file: UploadFile = File(...),
+):
+    content = await file.read()
+    payload = await creative_service.upload_project_media(
+        session,
+        user_id=user.id,
+        video_id=video_id,
+        filename=file.filename or "media.bin",
+        content=content,
+        content_type=file.content_type or "application/octet-stream",
+        settings=settings,
+    )
+    return success_response(
+        payload.model_dump(mode="json"),
+        translate("file_uploaded", locale),
+        status_code=201,
     )

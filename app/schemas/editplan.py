@@ -151,6 +151,26 @@ class CreativePlanValidateRequest(BaseModel):
     overlay_layouts: list[OverlayLayoutPatch] = Field(default_factory=list)
 
 
+class CreativePlanOverlayAddRequest(BaseModel):
+    """Add a user-uploaded or AI-generated overlay to the creative plan."""
+
+    prompt: str = Field(default="User media", min_length=1, max_length=500)
+    asset_url: str | None = Field(default=None, max_length=2000)
+    layout: OverlayLayout = "plate"
+    start: float | None = Field(default=None, ge=0)
+    end: float | None = Field(default=None, gt=0)
+    generate: bool = False
+
+
+class MediaAssetUploadResponse(BaseModel):
+    id: str
+    filename: str
+    content_type: str
+    size: int
+    secure_url: str
+    kind: Literal["image", "video", "other"] = "image"
+
+
 class CreativePlanZoom(BaseModel):
     start: float = Field(ge=0)
     end: float = Field(gt=0)
