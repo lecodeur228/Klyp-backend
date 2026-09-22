@@ -134,6 +134,12 @@ class OverlayLayoutPatch(BaseModel):
     layout: OverlayLayout
 
 
+class CreativePlanStartRequest(BaseModel):
+    """Optional user brief describing how to edit the video."""
+
+    prompt: str | None = Field(default=None, max_length=4000)
+
+
 class CreativePlanValidateRequest(BaseModel):
     accept_all: bool = False
     accept_overlay_ids: list[str] = Field(default_factory=list)

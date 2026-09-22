@@ -464,9 +464,11 @@ async def run_creative_plan_for_video(
     *,
     video_id: str,
     settings: Settings | None = None,
+    user_prompt: str | None = None,
 ) -> EditPlan:
     """Generate AI creative proposals and upsert EditPlan (status=proposed)."""
     settings = settings or get_settings()
+    brief = (user_prompt or "").strip()
     video = (
         await session.execute(select(Video).where(Video.id == video_id))
     ).scalar_one_or_none()
@@ -506,6 +508,7 @@ async def run_creative_plan_for_video(
         try:
             system, user, _ = render_prompt(
                 "creative_plan",
+                user_brief=brief or "(none — use best judgment for short-form)",
                 source_video_id=video_id,
                 duration=str(round(duration, 2)),
                 aspect=aspect,
@@ -567,6 +570,7 @@ async def run_creative_plan_for_video(
         dry_run=False,
     )
 
+    stored_prompt = brief if brief else "auto:creative_plan"
     row = await _get_plan_for_video(session, video_id=video_id)
     if row is None:
         row = EditPlan(
@@ -574,7 +578,7 @@ async def run_creative_plan_for_video(
             source_video_id=video.id,
             analysis_id=analysis.id,
             version=1,
-            prompt="auto:creative_plan",
+            prompt=stored_prompt,
             plan=document.model_dump(mode="json"),
             status="proposed",
         )
@@ -584,7 +588,7 @@ async def run_creative_plan_for_video(
         row.plan = document.model_dump(mode="json")
         row.status = "proposed"
         row.version = int(row.version or 1) + 1
-        row.prompt = "auto:creative_plan"
+        row.prompt = stored_prompt
 
     await session.flush()
     await session.refresh(row)
