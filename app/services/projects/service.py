@@ -9,6 +9,10 @@ from app.core.exceptions import NotFoundException
 from app.models.project import Project
 from app.models.video import Video
 from app.schemas.project import ProjectCreate, ProjectPublic, ProjectUpdate
+from app.services.projects.title_from_transcript import (
+    looks_like_default_title,
+    title_from_transcript_segments,
+)
 
 
 def to_public(
@@ -151,6 +155,37 @@ async def update_project(
     await session.flush()
     await session.refresh(project)
     return project
+
+
+async def maybe_rename_from_transcript(
+    session: AsyncSession,
+    *,
+    video_id: str,
+    segments: list | None,
+) -> str | None:
+    """If the project still has a filename-like title, replace it from ASR text."""
+    title = title_from_transcript_segments(segments)  # type: ignore[arg-type]
+    if not title:
+        return None
+
+    video = (
+        await session.execute(select(Video).where(Video.id == video_id))
+    ).scalar_one_or_none()
+    if not video:
+        return None
+
+    project = (
+        await session.execute(select(Project).where(Project.id == video.project_id))
+    ).scalar_one_or_none()
+    if not project:
+        return None
+
+    if not looks_like_default_title(project.name):
+        return None
+
+    project.name = title[:255]
+    await session.flush()
+    return project.name
 
 
 async def delete_project(
