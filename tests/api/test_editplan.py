@@ -6,7 +6,11 @@ import io
 
 import pytest
 from app.core.exceptions import EditPlanInvalidException
-from app.editplan.validation import validate_edit_plan
+from app.editplan.validation import (
+    ensure_valid_edit_plan,
+    repair_edit_plan,
+    validate_edit_plan,
+)
 from app.schemas.editplan import (
     EditPlanDocument,
     OutputConfig,
@@ -207,3 +211,30 @@ def test_validate_edit_plan_rejects_bad_cases() -> None:
     raw["output"]["aspect_ratio"] = "21:9"
     with pytest.raises(ValidationError):
         EditPlanDocument.model_validate(raw)
+
+
+def test_repair_and_ensure_valid_edit_plan() -> None:
+    messy = EditPlanDocument(
+        source_video_id="v1",
+        timeline=Timeline(
+            segments=[
+                TimelineSegment(id="a", start=0, end=5),
+                TimelineSegment(id="b", start=4, end=25),  # overlap + past duration
+            ]
+        ),
+        output=OutputConfig(resolution="720p", aspect_ratio="9:16"),
+    )
+    repaired = repair_edit_plan(messy, duration=20.0)
+    validated = validate_edit_plan(repaired, duration=20.0)
+    assert validated.timeline.segments
+    assert validated.timeline.segments[-1].end <= 20.0 + 1e-6
+
+    empty = EditPlanDocument(
+        source_video_id="v1",
+        timeline=Timeline(segments=[]),
+        output=OutputConfig(resolution="720p", aspect_ratio="9:16"),
+    )
+    ensured = ensure_valid_edit_plan(empty, duration=12.0)
+    assert len(ensured.timeline.segments) >= 1
+    assert ensured.timeline.segments[0].start == 0.0
+    assert ensured.timeline.segments[0].end == 12.0
