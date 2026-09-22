@@ -16,7 +16,7 @@ from app.core.config import Settings, get_settings
 from app.core.constants import ErrorCode
 from app.core.exceptions import ConflictException, EditPlanInvalidException, NotFoundException
 from app.credits import pricing
-from app.editplan.validation import validate_edit_plan
+from app.editplan.validation import ensure_valid_edit_plan, validate_edit_plan
 from app.models.analysis import VideoAnalysis
 from app.models.asset import Asset
 from app.models.edit_plan import EditPlan
@@ -323,11 +323,25 @@ async def generate_edit_plan_document(
     settings: Settings,
 ) -> EditPlanDocument:
     if settings.ai_provider == "fake" or settings.app_env == "test":
-        return build_fake_edit_plan(
-            source_video_id=video_id,
+        return ensure_valid_edit_plan(
+            build_fake_edit_plan(
+                source_video_id=video_id,
+                duration=duration,
+                vad_segments=list(analysis.vad_segments or []),
+                prompt=prompt,
+            ),
             duration=duration,
-            vad_segments=list(analysis.vad_segments or []),
-            prompt=prompt,
+        )
+
+    def _fallback() -> EditPlanDocument:
+        return ensure_valid_edit_plan(
+            build_fake_edit_plan(
+                source_video_id=video_id,
+                duration=duration,
+                vad_segments=list(analysis.vad_segments or []),
+                prompt=prompt,
+            ),
+            duration=duration,
         )
 
     provider = build_provider(settings)
@@ -344,23 +358,21 @@ async def generate_edit_plan_document(
         source_video_id=video_id,
     )
     schema = EditPlanDocument.model_json_schema()
-    result = await structured_output.generate_structured(
-        provider,
-        session,
-        user_id=user_id,
-        prompt=user_msg,
-        system=system,
-        schema=schema,
-    )
     try:
+        result = await structured_output.generate_structured(
+            provider,
+            session,
+            user_id=user_id,
+            prompt=user_msg,
+            system=system,
+            schema=schema,
+        )
         document = EditPlanDocument.model_validate(result.data)
-    except Exception as exc:  # noqa: BLE001
-        raise EditPlanInvalidException(
-            "AI returned invalid EditPlan shape",
-            errors={"plan": [str(exc)[:200]]},
-        ) from exc
-    document = document.model_copy(update={"source_video_id": video_id})
-    return validate_edit_plan(document, duration=duration)
+        document = document.model_copy(update={"source_video_id": video_id})
+        return ensure_valid_edit_plan(document, duration=duration)
+    except Exception:  # noqa: BLE001
+        # Noisy AI output must not break vibe editing — heal with heuristic plan
+        return _fallback()
 
 
 async def complete_ai_edit_inline(
@@ -399,7 +411,7 @@ async def complete_ai_edit_inline(
             analysis=analysis,
             settings=settings,
         )
-        validated = validate_edit_plan(document, duration=duration)
+        validated = ensure_valid_edit_plan(document, duration=duration)
         edit_plan.plan = validated.model_dump(mode="json")
         edit_plan.version = max(1, edit_plan.version + 1)
         edit_plan.prompt = prompt
