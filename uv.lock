@@ -1099,6 +1099,7 @@ dependencies = [
     { name = "email-validator" },
     { name = "fastapi" },
     { name = "greenlet" },
+    { name = "higgsfield-client" },
     { name = "httpx" },
     { name = "orjson" },
     { name = "passlib", extra = ["argon2"] },
@@ -1140,6 +1141,7 @@ requires-dist = [
     { name = "email-validator", specifier = ">=2.2.0" },
     { name = "fastapi", specifier = ">=0.115.0" },
     { name = "greenlet", specifier = ">=3.1.0" },
+    { name = "higgsfield-client", specifier = ">=0.2.0" },
     { name = "httpx", specifier = ">=0.28.0" },
     { name = "orjson", specifier = ">=3.10.0" },
     { name = "passlib", extras = ["argon2"], specifier = ">=1.7.4" },
@@ -1512,6 +1514,18 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/ab/5f/311725e2a905534dfee2dcb5b08414f249147f1f12252bfc2bd24caa075c/hf_xet-1.6.0-cp38-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:8fb4f71cba6129110c3374a33f919001ff130488fc23553698e34cc1c2a1198c", size = 4675937, upload-time = "2026-08-03T22:33:08.616Z" },
     { url = "https://files.pythonhosted.org/packages/98/b7/8c59a66d15205024662f1d66968136f13893f96df1ddc5087e2e281fc95f/hf_xet-1.6.0-cp38-abi3-win_amd64.whl", hash = "sha256:fb4fadde1b2b70bf4c0c14a6dccbe7194b1c28947fefd5bbe3fed9d940676c3b", size = 4033128, upload-time = "2026-08-03T22:33:10.171Z" },
     { url = "https://files.pythonhosted.org/packages/73/63/ca511b6f802f28cf3489b280fe77475bcca8de85e81a6299d7916b5b5555/hf_xet-1.6.0-cp38-abi3-win_arm64.whl", hash = "sha256:3dc3e35441ba395006af5aaacc40ef2e603c51ef46c3530b9156185f00935ea3", size = 3859359, upload-time = "2026-08-03T22:33:11.725Z" },
+]
+
+[[package]]
+name = "higgsfield-client"
+version = "0.2.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/55/cc/b462d4d29a12845ad8a2269d2e6281b04d0ba345618c2b021108af6590ad/higgsfield_client-0.2.0.tar.gz", hash = "sha256:c0f98a3550529b1883f4eb1127f49287bd57873e4cb597c49d9ef9da5b6cebd4", size = 19962, upload-time = "2026-09-17T17:19:27.54Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bc/19/146b9f46b0d8b5e1c03337e1ae77a794bdadec29d6e50d830ef25740e0e6/higgsfield_client-0.2.0-py3-none-any.whl", hash = "sha256:66a6310c2d9b210f021848eb9e03ed1a8c2991e2e8a1a328c470ce39a033f633", size = 23082, upload-time = "2026-09-17T17:19:26.311Z" },
 ]
 
 [[package]]

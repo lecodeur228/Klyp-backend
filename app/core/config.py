@@ -9,7 +9,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=(".env", ".env.local"),
         env_file_encoding="utf-8",
         extra="ignore",
     )
@@ -75,6 +75,9 @@ class Settings(BaseSettings):
     s3_endpoint_url: str = ""
     s3_access_key: str = ""
     s3_secret_key: str = ""
+
+    # Higgsfield (Seedance / VideoAI) — key-id:key-secret, server-side only
+    hf_key: str = ""
 
     # Credits pricing (integers)
     credits_analyze_base: int = 5
