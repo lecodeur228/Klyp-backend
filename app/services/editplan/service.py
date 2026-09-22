@@ -244,7 +244,7 @@ async def start_ai_edit(
             select(VideoAnalysis).where(VideoAnalysis.video_id == video.id)
         )
     ).scalar_one_or_none()
-    if not analysis or analysis.status != "ready":
+    if not analysis or analysis.status not in {"ready", "completed"}:
         raise ConflictException("Analysis must be ready before AI Edit")
 
     amount, _ = pricing.estimate_ai_edit(
