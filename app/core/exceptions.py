@@ -52,13 +52,29 @@ class ValidationException(AppException):
         message: str = "Validation failed",
         *,
         errors: dict[str, list[str]] | None = None,
+        code: ErrorCode = ErrorCode.VALIDATION_ERROR,
     ) -> None:
         super().__init__(
             message,
-            code=ErrorCode.VALIDATION_ERROR,
+            code=code,
             status_code=422,
             errors=errors,
         )
+
+
+class EditPlanInvalidException(ValidationException):
+    def __init__(
+        self,
+        message: str = "Invalid EditPlan",
+        *,
+        errors: dict[str, list[str]] | None = None,
+    ) -> None:
+        super().__init__(message, errors=errors, code=ErrorCode.EDIT_PLAN_INVALID)
+
+
+class InsufficientCreditsException(AppException):
+    def __init__(self, message: str = "Insufficient credits") -> None:
+        super().__init__(message, code=ErrorCode.INSUFFICIENT_CREDITS, status_code=402)
 
 
 class ConflictException(AppException):

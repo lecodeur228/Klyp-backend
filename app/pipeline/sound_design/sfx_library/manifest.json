@@ -1,0 +1,13 @@
+{
+  "license": "Bundled procedural stubs for local/dev. Replace with commercial SFX (Envato/Storyblocks) for production.",
+  "assets": [
+    {"id": "chime_01", "category": "chime", "file": "chime_01.wav", "label": "Soft chime"},
+    {"id": "chime_02", "category": "chime", "file": "chime_02.wav", "label": "Bright chime"},
+    {"id": "pop_01", "category": "pop", "file": "pop_01.wav", "label": "UI pop"},
+    {"id": "whoosh_01", "category": "whoosh", "file": "whoosh_01.wav", "label": "Air whoosh"},
+    {"id": "whoosh_02", "category": "whoosh", "file": "whoosh_02.wav", "label": "Fast whoosh"},
+    {"id": "riser_01", "category": "riser", "file": "riser_01.wav", "label": "Soft riser"},
+    {"id": "swipe_01", "category": "swipe", "file": "swipe_01.wav", "label": "Swipe"},
+    {"id": "swipe_02", "category": "swipe", "file": "swipe_02.wav", "label": "Page swipe"}
+  ]
+}

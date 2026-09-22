@@ -1,0 +1,44 @@
+{
+  "id": "099-morning-light",
+  "name": "Morning Light",
+  "label": "Morning Light",
+  "category": "nature-lifestyle",
+  "featured": false,
+  "font": {
+    "family": "Caveat",
+    "weight": "700",
+    "case": "mixed"
+  },
+  "font_family": "Caveat",
+  "bold": true,
+  "animation": "fade_slide_up",
+  "easing": "ease-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#3A3A3A",
+    "highlight": "#FFB6C1",
+    "css_text": "#3A3A3A",
+    "css_highlight": "#FFB6C1",
+    "primary_ass": "&H003A3A3A",
+    "highlight_ass": "&H00C1B6FF",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": "#FFF5F7",
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 0,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "fade_slide_up",
+    "duration_ms": 150,
+    "easing": "ease-out"
+  }
+}

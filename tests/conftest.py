@@ -15,12 +15,14 @@ os.environ.setdefault("AI_PROVIDER", "fake")
 os.environ.setdefault("SECRET_KEY", "change-me-to-a-long-random-secret-key-at-least-32")
 os.environ.setdefault("DATABASE_URL", "sqlite+aiosqlite:///:memory:")
 os.environ.setdefault("DATABASE_URL_SYNC", "sqlite:///:memory:")
+os.environ["STORAGE_BACKEND"] = "local"
 
 from app.core.config import get_settings
 from app.core.security import hash_password
 from app.db.base import Base
 from app.db.seed import seed
 from app.main import create_app
+from app.models.credit_account import CreditAccount
 from app.models.user import Role, User
 
 get_settings.cache_clear()
@@ -41,6 +43,7 @@ async def session() -> AsyncGenerator[AsyncSession, None]:
 
 @pytest_asyncio.fixture
 async def client(session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
+    get_settings.cache_clear()
     app = create_app()
 
     async def _override_db() -> AsyncGenerator[AsyncSession, None]:
@@ -54,12 +57,15 @@ async def client(session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
     from app.db.session import get_db
 
     app.dependency_overrides[get_db] = _override_db
+    # Force local storage in tests regardless of developer .env
+    app.dependency_overrides[get_settings] = lambda: get_settings()
 
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         yield ac
 
     app.dependency_overrides.clear()
+    get_settings.cache_clear()
 
 
 @pytest_asyncio.fixture
@@ -73,6 +79,9 @@ async def auth_headers(client: AsyncClient, session: AsyncSession) -> dict[str, 
     role = (await session.execute(select(Role).where(Role.name == "user"))).scalar_one()
     user.roles.append(role)
     session.add(user)
+    await session.flush()
+    # Fund test user so existing analyze/edit/render smokes keep working
+    session.add(CreditAccount(user_id=user.id, balance=10_000))
     await session.commit()
 
     response = await client.post(
@@ -82,3 +91,20 @@ async def auth_headers(client: AsyncClient, session: AsyncSession) -> dict[str, 
     assert response.status_code == 200, response.text
     token = response.json()["data"]["access_token"]
     return {"Authorization": f"Bearer {token}"}
+
+
+async def topup_credits(
+    client: AsyncClient,
+    headers: dict[str, str],
+    *,
+    credits: int = 1000,
+    idempotency_key: str = "test-topup",
+) -> dict:
+    """Helper for ops tests that need an explicit wallet top-up."""
+    response = await client.post(
+        "/api/v1/payments/checkout",
+        headers=headers,
+        json={"credits": credits, "idempotency_key": idempotency_key},
+    )
+    assert response.status_code == 201, response.text
+    return response.json()["data"]

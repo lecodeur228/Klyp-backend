@@ -1,0 +1,44 @@
+{
+  "id": "032-pixel-rush",
+  "name": "Pixel Rush",
+  "label": "Pixel Rush",
+  "category": "neon-gaming",
+  "featured": false,
+  "font": {
+    "family": "Righteous",
+    "weight": "400",
+    "case": "uppercase"
+  },
+  "font_family": "Righteous",
+  "bold": false,
+  "animation": "typewriter",
+  "easing": "linear",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#39FF14",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#39FF14",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H0014FF39",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "box",
+    "color": "#0D0D0D",
+    "opacity": 0.7
+  },
+  "stroke": {
+    "width": 3,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "typewriter",
+    "duration_ms": 40,
+    "easing": "linear"
+  }
+}

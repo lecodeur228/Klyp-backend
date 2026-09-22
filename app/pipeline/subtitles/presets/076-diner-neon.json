@@ -1,0 +1,44 @@
+{
+  "id": "076-diner-neon",
+  "name": "Diner Neon",
+  "label": "Diner Neon",
+  "category": "retro",
+  "featured": false,
+  "font": {
+    "family": "Righteous",
+    "weight": "400",
+    "case": "uppercase"
+  },
+  "font_family": "Righteous",
+  "bold": false,
+  "animation": "glow_pulse",
+  "easing": "ease-in-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#FF1B6B",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#FF1B6B",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H006B1BFF",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": null,
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 2,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "glow_pulse",
+    "duration_ms": 400,
+    "easing": "ease-in-out"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "060-recess",
+  "name": "Recess",
+  "label": "Recess",
+  "category": "playful",
+  "featured": false,
+  "font": {
+    "family": "Caveat",
+    "weight": "700",
+    "case": "mixed"
+  },
+  "font_family": "Caveat",
+  "bold": true,
+  "animation": "bounce_drop",
+  "easing": "ease-out-bounce",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#4CAF50",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#4CAF50",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H0050AF4C",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": null,
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 0,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "bounce_drop",
+    "duration_ms": 220,
+    "easing": "ease-out-bounce"
+  }
+}

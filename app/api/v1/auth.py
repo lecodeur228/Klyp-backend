@@ -5,7 +5,7 @@ from fastapi import APIRouter, Request
 from app.api.dependencies import AppSettings, CurrentUser, DbSession, LocaleDep
 from app.core.responses import success_response
 from app.i18n.messages import translate
-from app.schemas.auth import LoginRequest, RefreshRequest, RegisterRequest
+from app.schemas.auth import CheckEmailRequest, LoginRequest, RefreshRequest, RegisterRequest
 from app.services.auth import service as auth_service
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -21,14 +21,32 @@ async def register(
     tokens = await auth_service.register_user(
         session,
         settings,
-        name=body.name,
+        name=body.name or "",
         email=body.email,
         password=body.password,
+        first_name=body.first_name,
+        last_name=body.last_name,
+        profession=body.profession,
+        referral_source=body.referral_source,
     )
     return success_response(
         tokens.model_dump(),
         translate("register_success", locale),
         status_code=201,
+    )
+
+
+@router.post("/check-email")
+async def check_email(
+    body: CheckEmailRequest,
+    session: DbSession,
+    locale: LocaleDep,
+):
+    """Return whether an email can be used for registration."""
+    existing = await auth_service.get_user_by_email(session, body.email)
+    return success_response(
+        {"available": existing is None},
+        translate("ok", locale),
     )
 
 

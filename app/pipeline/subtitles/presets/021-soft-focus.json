@@ -1,0 +1,44 @@
+{
+  "id": "021-soft-focus",
+  "name": "Soft Focus",
+  "label": "Soft Focus",
+  "category": "minimal-clean",
+  "featured": false,
+  "font": {
+    "family": "Space Grotesk",
+    "weight": "700",
+    "case": "mixed"
+  },
+  "font_family": "Space Grotesk",
+  "bold": true,
+  "animation": "blur_focus",
+  "easing": "ease-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#0A2540",
+    "highlight": "#7FDBFF",
+    "css_text": "#0A2540",
+    "css_highlight": "#7FDBFF",
+    "primary_ass": "&H0040250A",
+    "highlight_ass": "&H00FFDB7F",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": "#EAF6FF",
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 0,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "blur_focus",
+    "duration_ms": 200,
+    "easing": "ease-out"
+  }
+}

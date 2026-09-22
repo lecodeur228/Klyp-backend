@@ -1,0 +1,44 @@
+{
+  "id": "100-botanical",
+  "name": "Botanical",
+  "label": "Botanical",
+  "category": "nature-lifestyle",
+  "featured": false,
+  "font": {
+    "family": "Oswald",
+    "weight": "700",
+    "case": "mixed"
+  },
+  "font_family": "Oswald",
+  "bold": true,
+  "animation": "fade_slide_up",
+  "easing": "ease-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#2F3B2F",
+    "highlight": "#87A96B",
+    "css_text": "#2F3B2F",
+    "css_highlight": "#87A96B",
+    "primary_ass": "&H002F3B2F",
+    "highlight_ass": "&H006BA987",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": "#F4F7F2",
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 0,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "fade_slide_up",
+    "duration_ms": 150,
+    "easing": "ease-out"
+  }
+}

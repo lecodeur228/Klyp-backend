@@ -63,13 +63,21 @@ async def register_user(
     name: str,
     email: str,
     password: str,
+    first_name: str | None = None,
+    last_name: str | None = None,
+    profession: str | None = None,
+    referral_source: str | None = None,
 ) -> TokenPair:
     existing = await get_user_by_email(session, email)
     if existing:
         raise ConflictException("Email already exists", code=ErrorCode.EMAIL_ALREADY_EXISTS)
 
     user = User(
-        name=name,
+        name=name.strip(),
+        first_name=(first_name or "").strip() or None,
+        last_name=(last_name or "").strip() or None,
+        profession=(profession or "").strip() or None,
+        referral_source=(referral_source or "").strip() or None,
         email=email.lower(),
         password_hash=hash_password(password),
         is_active=True,
@@ -79,6 +87,11 @@ async def register_user(
         user.roles.append(role)
     session.add(user)
     await session.flush()
+
+    from app.services.credits import service as credits_service
+
+    await credits_service.ensure_account(session, user_id=user.id)
+
     return await issue_tokens(session, settings, user)
 
 

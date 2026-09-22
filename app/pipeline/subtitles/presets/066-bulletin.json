@@ -1,0 +1,44 @@
+{
+  "id": "066-bulletin",
+  "name": "Bulletin",
+  "label": "Bulletin",
+  "category": "news-edu",
+  "featured": false,
+  "font": {
+    "family": "Oswald",
+    "weight": "700",
+    "case": "uppercase"
+  },
+  "font_family": "Oswald",
+  "bold": true,
+  "animation": "slide_left",
+  "easing": "ease-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#FF3B30",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#FF3B30",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H00303BFF",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "line",
+    "color": null,
+    "opacity": 0.7
+  },
+  "stroke": {
+    "width": 0,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "slide_left",
+    "duration_ms": 180,
+    "easing": "ease-out"
+  }
+}

@@ -12,6 +12,7 @@ import httpx
 from app.ai.providers.base import (
     AIEmbedResult,
     AIGenerateResult,
+    AIImageResult,
     AIStructuredResult,
     AIUsageStats,
 )
@@ -92,7 +93,7 @@ class RodiumAIProvider:
     async def generate(
         self,
         *,
-        messages: list[dict[str, str]],
+        messages: list[dict[str, Any]],
         model: str | None = None,
         temperature: float | None = None,
         max_tokens: int | None = None,
@@ -125,7 +126,7 @@ class RodiumAIProvider:
     async def stream(
         self,
         *,
-        messages: list[dict[str, str]],
+        messages: list[dict[str, Any]],
         model: str | None = None,
         temperature: float | None = None,
         max_tokens: int | None = None,
@@ -164,7 +165,7 @@ class RodiumAIProvider:
     async def generate_structured(
         self,
         *,
-        messages: list[dict[str, str]],
+        messages: list[dict[str, Any]],
         schema: dict[str, Any],
         model: str | None = None,
     ) -> AIStructuredResult:
@@ -220,4 +221,91 @@ class RodiumAIProvider:
             model=str(payload.get("model") or model_name),
             provider=self.name,
             usage=self._usage(payload),
+        )
+
+    async def generate_image(
+        self,
+        *,
+        prompt: str,
+        model: str | None = None,
+        size: str = "1024x1024",
+    ) -> AIImageResult:
+        import base64
+
+        body = {
+            "model": model or self.settings.image_model,
+            "prompt": prompt,
+            "size": size,
+            "n": 1,
+        }
+        timeout = max(self.settings.image_timeout, self.settings.rodiumai_timeout)
+        try:
+            async with httpx.AsyncClient(
+                base_url=self.settings.rodiumai_base_url.rstrip("/"),
+                timeout=timeout,
+                headers={
+                    "Authorization": f"Bearer {self.settings.rodiumai_api_key}",
+                    "Content-Type": "application/json",
+                },
+            ) as client:
+                response = await client.post("/images/generations", json=body)
+        except httpx.TimeoutException as exc:
+            raise AITimeoutException() from exc
+        except httpx.HTTPError as exc:
+            raise AIProviderException(
+                "AI image provider unavailable",
+                code=ErrorCode.AI_PROVIDER_UNAVAILABLE,
+            ) from exc
+
+        if response.status_code >= 400:
+            raise AIProviderException(
+                response.text[:300] or "Image generation failed",
+                code=ErrorCode.AI_INVALID_RESPONSE,
+                status_code=502,
+            )
+
+        payload = response.json()
+        try:
+            item = payload["data"][0]
+        except (KeyError, IndexError, TypeError) as exc:
+            raise AIProviderException(
+                "Invalid image response",
+                code=ErrorCode.AI_INVALID_RESPONSE,
+            ) from exc
+
+        revised = item.get("revised_prompt")
+        if item.get("b64_json"):
+            content = base64.b64decode(item["b64_json"])
+            return AIImageResult(
+                content=content,
+                mime_type="image/png",
+                model=str(body["model"]),
+                provider=self.name,
+                revised_prompt=revised,
+            )
+
+        url = item.get("url")
+        if not url:
+            raise AIProviderException(
+                "Image response missing url/b64",
+                code=ErrorCode.AI_INVALID_RESPONSE,
+            )
+        try:
+            img_resp = await self._client.get(url)
+            img_resp.raise_for_status()
+        except httpx.HTTPError as exc:
+            # Absolute URL may not use base_url client
+            async with httpx.AsyncClient(timeout=timeout) as dl:
+                img_resp = await dl.get(url)
+                if img_resp.status_code >= 400:
+                    raise AIProviderException(
+                        "Failed to download generated image",
+                        code=ErrorCode.AI_PROVIDER_UNAVAILABLE,
+                    ) from exc
+        return AIImageResult(
+            content=img_resp.content,
+            mime_type=img_resp.headers.get("content-type", "image/png"),
+            model=str(body["model"]),
+            provider=self.name,
+            revised_prompt=revised,
         )

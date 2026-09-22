@@ -1,0 +1,44 @@
+{
+  "id": "024-understated",
+  "name": "Understated",
+  "label": "Understated",
+  "category": "minimal-clean",
+  "featured": false,
+  "font": {
+    "family": "Inter",
+    "weight": "700",
+    "case": "lowercase"
+  },
+  "font_family": "Inter",
+  "bold": true,
+  "animation": "fade_slide_up",
+  "easing": "ease-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#FFFFFF",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#FFFFFF",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H00FFFFFF",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": "#000000",
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 0,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "fade_slide_up",
+    "duration_ms": 150,
+    "easing": "ease-out"
+  }
+}

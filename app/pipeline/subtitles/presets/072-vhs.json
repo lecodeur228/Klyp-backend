@@ -1,0 +1,44 @@
+{
+  "id": "072-vhs",
+  "name": "VHS",
+  "label": "VHS",
+  "category": "retro",
+  "featured": false,
+  "font": {
+    "family": "Oswald",
+    "weight": "700",
+    "case": "uppercase"
+  },
+  "font_family": "Oswald",
+  "bold": true,
+  "animation": "typewriter",
+  "easing": "linear",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#3E2C1C",
+    "highlight": "#A85C32",
+    "css_text": "#3E2C1C",
+    "css_highlight": "#A85C32",
+    "primary_ass": "&H001C2C3E",
+    "highlight_ass": "&H00325CA8",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": null,
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 2,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "typewriter",
+    "duration_ms": 40,
+    "easing": "linear"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "085-static-noise",
+  "name": "Static Noise",
+  "label": "Static Noise",
+  "category": "dark-horror",
+  "featured": false,
+  "font": {
+    "family": "Space Grotesk",
+    "weight": "700",
+    "case": "uppercase"
+  },
+  "font_family": "Space Grotesk",
+  "bold": true,
+  "animation": "shake_punch",
+  "easing": "ease-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#8B0000",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#8B0000",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H0000008B",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": "#000000",
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 0,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "shake_punch",
+    "duration_ms": 160,
+    "easing": "ease-out"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "008-bang",
+  "name": "Bang",
+  "label": "Bang",
+  "category": "bold-punchy",
+  "featured": false,
+  "font": {
+    "family": "Archivo Black",
+    "weight": "400",
+    "case": "uppercase"
+  },
+  "font_family": "Archivo Black",
+  "bold": false,
+  "animation": "shake_punch",
+  "easing": "ease-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#FF5722",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#FF5722",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H002257FF",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": null,
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 5,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "center",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "shake_punch",
+    "duration_ms": 160,
+    "easing": "ease-out"
+  }
+}

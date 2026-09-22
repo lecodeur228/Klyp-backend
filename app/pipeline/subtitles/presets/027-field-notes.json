@@ -1,0 +1,44 @@
+{
+  "id": "027-field-notes",
+  "name": "Field Notes",
+  "label": "Field Notes",
+  "category": "minimal-clean",
+  "featured": false,
+  "font": {
+    "family": "Space Grotesk",
+    "weight": "700",
+    "case": "mixed"
+  },
+  "font_family": "Space Grotesk",
+  "bold": true,
+  "animation": "typewriter",
+  "easing": "linear",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#B0B0B0",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#B0B0B0",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H00B0B0B0",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": null,
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 0,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "typewriter",
+    "duration_ms": 40,
+    "easing": "linear"
+  }
+}

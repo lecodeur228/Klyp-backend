@@ -39,13 +39,22 @@ class AIEmbedResult:
     usage: AIUsageStats = field(default_factory=AIUsageStats)
 
 
+@dataclass
+class AIImageResult:
+    content: bytes
+    mime_type: str
+    model: str
+    provider: str
+    revised_prompt: str | None = None
+
+
 class AIProvider(Protocol):
     name: str
 
     async def generate(
         self,
         *,
-        messages: list[dict[str, str]],
+        messages: list[dict[str, Any]],
         model: str | None = None,
         temperature: float | None = None,
         max_tokens: int | None = None,
@@ -54,7 +63,7 @@ class AIProvider(Protocol):
     def stream(
         self,
         *,
-        messages: list[dict[str, str]],
+        messages: list[dict[str, Any]],
         model: str | None = None,
         temperature: float | None = None,
         max_tokens: int | None = None,
@@ -63,7 +72,7 @@ class AIProvider(Protocol):
     async def generate_structured(
         self,
         *,
-        messages: list[dict[str, str]],
+        messages: list[dict[str, Any]],
         schema: dict[str, Any],
         model: str | None = None,
     ) -> AIStructuredResult: ...

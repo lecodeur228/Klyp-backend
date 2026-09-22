@@ -1,0 +1,44 @@
+{
+  "id": "064-explainer",
+  "name": "Explainer",
+  "label": "Explainer",
+  "category": "news-edu",
+  "featured": false,
+  "font": {
+    "family": "Space Grotesk",
+    "weight": "700",
+    "case": "mixed"
+  },
+  "font_family": "Space Grotesk",
+  "bold": true,
+  "animation": "fade_slide_up",
+  "easing": "ease-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#00C2FF",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#00C2FF",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H00FFC200",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "word_highlight",
+    "color": null,
+    "opacity": 0.7
+  },
+  "stroke": {
+    "width": 1,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "fade_slide_up",
+    "duration_ms": 150,
+    "easing": "ease-out"
+  }
+}

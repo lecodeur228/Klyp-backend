@@ -9,6 +9,7 @@ from typing import Any
 from app.ai.providers.base import (
     AIEmbedResult,
     AIGenerateResult,
+    AIImageResult,
     AIStructuredResult,
     AIUsageStats,
 )
@@ -20,28 +21,40 @@ class FakeAIProvider:
     async def generate(
         self,
         *,
-        messages: list[dict[str, str]],
+        messages: list[dict[str, Any]],
         model: str | None = None,
         temperature: float | None = None,
         max_tokens: int | None = None,
     ) -> AIGenerateResult:
-        last = messages[-1]["content"] if messages else ""
-        content = f"FAKE_RESPONSE: {last[:500]}"
+        raw = messages[-1].get("content") if messages else ""
+        if isinstance(raw, list):
+            last = " ".join(
+                str(p.get("text") or "") for p in raw if isinstance(p, dict)
+            )
+        else:
+            last = str(raw or "")
+        # Vision placement probe
+        if "caption placement" in last.lower() or "position" in last.lower():
+            content = json.dumps(
+                {"position": "lower", "scale": "md", "reason": "talking head safe default"}
+            )
+        else:
+            content = f"FAKE_RESPONSE: {last[:500]}"
         return AIGenerateResult(
             content=content,
             model=model or "fake-model",
             provider=self.name,
             usage=AIUsageStats(
-                prompt_tokens=len(last.split()),
+                prompt_tokens=max(len(last.split()), 1),
                 completion_tokens=len(content.split()),
-                total_tokens=len(last.split()) + len(content.split()),
+                total_tokens=max(len(last.split()), 1) + len(content.split()),
             ),
         )
 
     async def stream(
         self,
         *,
-        messages: list[dict[str, str]],
+        messages: list[dict[str, Any]],
         model: str | None = None,
         temperature: float | None = None,
         max_tokens: int | None = None,
@@ -53,12 +66,22 @@ class FakeAIProvider:
     async def generate_structured(
         self,
         *,
-        messages: list[dict[str, str]],
+        messages: list[dict[str, Any]],
         schema: dict[str, Any],
         model: str | None = None,
     ) -> AIStructuredResult:
-        last = messages[-1]["content"] if messages else ""
-        data = {"summary": last[:200], "schema": schema.get("title", "object")}
+        raw = messages[-1].get("content") if messages else ""
+        if isinstance(raw, list):
+            last = " ".join(
+                str(p.get("text") or "") for p in raw if isinstance(p, dict)
+            )
+        else:
+            last = str(raw or "")
+        title = schema.get("title", "object")
+        if title == "CaptionPlacement":
+            data = {"position": "lower", "scale": "md", "reason": "fake"}
+        else:
+            data = {"summary": last[:200], "schema": title}
         return AIStructuredResult(
             data=data,
             model=model or "fake-model",
@@ -78,6 +101,29 @@ class FakeAIProvider:
             model=model or "fake-embed",
             provider=self.name,
             usage=AIUsageStats(prompt_tokens=sum(len(i.split()) for i in inputs), total_tokens=0),
+        )
+
+    async def generate_image(
+        self,
+        *,
+        prompt: str,
+        model: str | None = None,
+        size: str = "1024x1024",
+    ) -> AIImageResult:
+        # 1x1 PNG
+        png = (
+            b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01"
+            b"\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00"
+            b"\x00\x0cIDATx\x9cc\xf8\x0f\x00\x00\x01\x01\x00\x05\x18"
+            b"\xd8N\x00\x00\x00\x00IEND\xaeB`\x82"
+        )
+        _ = size
+        return AIImageResult(
+            content=png,
+            mime_type="image/png",
+            model=model or "fake-image",
+            provider=self.name,
+            revised_prompt=prompt[:200],
         )
 
     def dumps_example(self) -> str:

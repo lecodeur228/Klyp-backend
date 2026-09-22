@@ -1,0 +1,44 @@
+{
+  "id": "009-confetti-pop",
+  "name": "Confetti Pop",
+  "label": "Confetti Pop",
+  "category": "bold-punchy",
+  "featured": false,
+  "font": {
+    "family": "Anton",
+    "weight": "400",
+    "case": "uppercase"
+  },
+  "font_family": "Anton",
+  "bold": false,
+  "animation": "bounce_drop",
+  "easing": "ease-out-bounce",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#FF6EC7",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#FF6EC7",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H00C76EFF",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "word_highlight",
+    "color": null,
+    "opacity": 0.7
+  },
+  "stroke": {
+    "width": 2,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "bounce_drop",
+    "duration_ms": 220,
+    "easing": "ease-out-bounce"
+  }
+}

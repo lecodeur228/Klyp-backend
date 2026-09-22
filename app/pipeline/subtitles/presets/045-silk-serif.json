@@ -1,0 +1,44 @@
+{
+  "id": "045-silk-serif",
+  "name": "Silk Serif",
+  "label": "Silk Serif",
+  "category": "luxury",
+  "featured": false,
+  "font": {
+    "family": "Playfair Display",
+    "weight": "700",
+    "case": "mixed"
+  },
+  "font_family": "Playfair Display",
+  "bold": true,
+  "animation": "typewriter",
+  "easing": "linear",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#2B2B2B",
+    "highlight": "#C9A66B",
+    "css_text": "#2B2B2B",
+    "css_highlight": "#C9A66B",
+    "primary_ass": "&H002B2B2B",
+    "highlight_ass": "&H006BA6C9",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": "#FFF8ED",
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 0,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "typewriter",
+    "duration_ms": 40,
+    "easing": "linear"
+  }
+}
