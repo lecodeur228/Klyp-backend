@@ -185,3 +185,15 @@ def test_words_from_analysis():
     assert len(words) == 1
     assert words[0].emphasis == "negation"
     assert words[0].important is True
+
+
+def test_sounds_manifest_and_search_helpers():
+    from app.api.v1.sounds import _matches_query, _serialize_assets
+    from app.pipeline.sound_design.placement import load_manifest, resolve_asset_path
+
+    assets = _serialize_assets(list(load_manifest().get("assets") or []))
+    assert len(assets) >= 1
+    assert resolve_asset_path(assets[0]["id"]) is not None
+    assert resolve_asset_path("__missing__") is None
+    assert any(_matches_query(a, "whoosh") for a in assets)
+    assert not any(_matches_query(a, "zzzz-missing") for a in assets)
