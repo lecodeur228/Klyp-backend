@@ -25,6 +25,7 @@ from app.schemas.editplan import (
     CaptionsConfig,
     CreativePlanPublic,
     CreativePlanValidateRequest,
+    CreativePlanZoom,
     EditPlanDocument,
     OutputConfig,
     Timeline,
@@ -45,6 +46,37 @@ from app.storage import get_storage
 logger = logging.getLogger(__name__)
 
 VISUAL_STYLES = frozenset({"prism", "paper", "prime", "elevate", "pulse"})
+
+_PACE_KEYS = (
+    "coupe",
+    "silence",
+    "rythme",
+    "pace",
+    "rapide",
+    "cut",
+    "tight",
+    "dynamique",
+    "tiktok",
+    "punchy",
+    "énergie",
+    "energie",
+    "energy",
+)
+_ZOOM_KEYS = ("zoom", "punch", "dynamique", "énergie", "energie", "energy", "proche")
+
+
+def _brief_aggressiveness(brief: str) -> float:
+    b = brief.lower()
+    if any(k in b for k in _PACE_KEYS):
+        return 1.85
+    return 1.0
+
+
+def _brief_zoom_budget(brief: str) -> float:
+    b = brief.lower()
+    if any(k in b for k in _ZOOM_KEYS) or any(k in b for k in _PACE_KEYS):
+        return 7.0
+    return 4.0
 
 
 def _coerce_visual_style(raw: str | None) -> VisualStyle:
@@ -444,6 +476,11 @@ def to_creative_public(row: EditPlan | None, *, video_id: str, project_id: str) 
             validated=False,
         )
     plan = EditPlanDocument.model_validate(row.plan or {"source_video_id": video_id})
+    zooms = [
+        CreativePlanZoom(start=float(op.start), end=float(op.end), scale=float(op.scale))
+        for op in plan.operations
+        if getattr(op, "type", None) == "zoom"
+    ]
     return CreativePlanPublic(
         video_id=video_id,
         project_id=project_id,
@@ -455,6 +492,7 @@ def to_creative_public(row: EditPlan | None, *, video_id: str, project_id: str) 
         captions_scale=plan.captions.scale,
         overlays=plan.overlays,
         timeline_segments=list(plan.timeline.segments),
+        zooms=zooms,
         validated=row.status in {"ready", "validated"},
     )
 
@@ -491,11 +529,14 @@ async def run_creative_plan_for_video(
 
     duration = float(asset.duration) if asset.duration else 30.0
     aspect = _aspect_from_asset(asset)
+    aggressiveness = _brief_aggressiveness(brief)
+    zoom_budget = _brief_zoom_budget(brief)
     keep_segments = build_keep_segments(
         duration=duration,
         segments=list(analysis.segments or []),
         vad_segments=list(analysis.vad_segments or []),
         fillers=list(analysis.fillers or []),
+        aggressiveness=aggressiveness,
     )
     transcript = _timed_transcript(analysis)
     keeps_text = _format_keeps(keep_segments)
@@ -542,6 +583,10 @@ async def run_creative_plan_for_video(
         duration=duration,
         settings=settings,
     )
+    # Pace briefs: push visible caption energy so the preview actually changes.
+    if aggressiveness > 1.0:
+        data["captions_mode"] = "dynamic"
+        cap_scale = "lg"
 
     document = _document_from_creative(
         video_id=video_id,
@@ -568,6 +613,7 @@ async def run_creative_plan_for_video(
         art_direction=f"{visual_style} consistent palette",
         needs_review=bool(qa.get("needs_review")),
         dry_run=False,
+        zoom_budget_per_min=zoom_budget,
     )
 
     stored_prompt = brief if brief else "auto:creative_plan"

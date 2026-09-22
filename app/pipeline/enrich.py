@@ -28,6 +28,7 @@ def enrich_edit_plan(
     art_direction: str | None = None,
     needs_review: bool = False,
     dry_run: bool = False,
+    zoom_budget_per_min: float = 4.0,
 ) -> EditPlanDocument:
     """Apply editorial rules, zoom scoring, SFX placement; attach events JSON."""
     words = words_from_analysis_segments(analysis_segments)
@@ -82,6 +83,7 @@ def enrich_edit_plan(
     zooms, zoom_metrics = propose_zooms(
         duration=duration,
         words=words,
+        budget_per_min=zoom_budget_per_min,
         dry_run=dry_run,
     )
     zoom_ops = [
