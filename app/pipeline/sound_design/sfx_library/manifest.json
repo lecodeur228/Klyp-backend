@@ -1,5 +1,5 @@
 {
-  "license": "Bundled procedural stubs for local/dev. Upload to Cloudinary via scripts/import_sfx_cloudinary.py for production CDN. Replace with commercial short-form SFX (licence export UGC OK) when scaling the library.",
+  "license": "Procedural short-form stubs generated for Klyp auto sound design. Upload via scripts/import_sfx_cloudinary.py. Replace/extend with commercial packs (licence export UGC OK) when scaling.",
   "storage": "cloudinary",
   "folder": "klyp/sfx",
   "assets": [
@@ -13,9 +13,9 @@
         "emphasis",
         "notification"
       ],
-      "duration_ms": 180,
+      "duration_ms": 190,
       "public_id": "klyp/sfx/chime/chime_01",
-      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102651/klyp/sfx/chime/chime_01.wav"
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103449/klyp/sfx/chime/chime_01.wav"
     },
     {
       "id": "chime_02",
@@ -26,9 +26,139 @@
         "bright",
         "emphasis"
       ],
-      "duration_ms": 150,
+      "duration_ms": 220,
       "public_id": "klyp/sfx/chime/chime_02",
-      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102652/klyp/sfx/chime/chime_02.wav"
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103450/klyp/sfx/chime/chime_02.wav"
+    },
+    {
+      "id": "chime_03",
+      "category": "chime",
+      "file": "chime_03.wav",
+      "label": "Glass ping",
+      "tags": [
+        "glass",
+        "emphasis"
+      ],
+      "duration_ms": 250,
+      "public_id": "klyp/sfx/chime/chime_03",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103451/klyp/sfx/chime/chime_03.wav"
+    },
+    {
+      "id": "chime_04",
+      "category": "chime",
+      "file": "chime_04.wav",
+      "label": "Warm bell",
+      "tags": [
+        "warm",
+        "emphasis"
+      ],
+      "duration_ms": 160,
+      "public_id": "klyp/sfx/chime/chime_04",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103452/klyp/sfx/chime/chime_04.wav"
+    },
+    {
+      "id": "chime_05",
+      "category": "chime",
+      "file": "chime_05.wav",
+      "label": "Sparkle",
+      "tags": [
+        "sparkle",
+        "notification"
+      ],
+      "duration_ms": 190,
+      "public_id": "klyp/sfx/chime/chime_05",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103453/klyp/sfx/chime/chime_05.wav"
+    },
+    {
+      "id": "chime_06",
+      "category": "chime",
+      "file": "chime_06.wav",
+      "label": "Low chime",
+      "tags": [
+        "low",
+        "emphasis"
+      ],
+      "duration_ms": 220,
+      "public_id": "klyp/sfx/chime/chime_06",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103454/klyp/sfx/chime/chime_06.wav"
+    },
+    {
+      "id": "chime_07",
+      "category": "chime",
+      "file": "chime_07.wav",
+      "label": "Crystal",
+      "tags": [
+        "crystal",
+        "bright"
+      ],
+      "duration_ms": 250,
+      "public_id": "klyp/sfx/chime/chime_07",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103455/klyp/sfx/chime/chime_07.wav"
+    },
+    {
+      "id": "chime_08",
+      "category": "chime",
+      "file": "chime_08.wav",
+      "label": "Soft bell",
+      "tags": [
+        "soft",
+        "bell"
+      ],
+      "duration_ms": 160,
+      "public_id": "klyp/sfx/chime/chime_08",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103456/klyp/sfx/chime/chime_08.wav"
+    },
+    {
+      "id": "chime_09",
+      "category": "chime",
+      "file": "chime_09.wav",
+      "label": "Hi sparkle",
+      "tags": [
+        "sparkle",
+        "hi"
+      ],
+      "duration_ms": 190,
+      "public_id": "klyp/sfx/chime/chime_09",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103456/klyp/sfx/chime/chime_09.wav"
+    },
+    {
+      "id": "chime_10",
+      "category": "chime",
+      "file": "chime_10.wav",
+      "label": "Deep bell",
+      "tags": [
+        "deep",
+        "emphasis"
+      ],
+      "duration_ms": 220,
+      "public_id": "klyp/sfx/chime/chime_10",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103457/klyp/sfx/chime/chime_10.wav"
+    },
+    {
+      "id": "chime_11",
+      "category": "chime",
+      "file": "chime_11.wav",
+      "label": "Clear ding",
+      "tags": [
+        "clear",
+        "notification"
+      ],
+      "duration_ms": 250,
+      "public_id": "klyp/sfx/chime/chime_11",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103458/klyp/sfx/chime/chime_11.wav"
+    },
+    {
+      "id": "chime_12",
+      "category": "chime",
+      "file": "chime_12.wav",
+      "label": "Twinkle",
+      "tags": [
+        "twinkle",
+        "bright"
+      ],
+      "duration_ms": 160,
+      "public_id": "klyp/sfx/chime/chime_12",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103459/klyp/sfx/chime/chime_12.wav"
     },
     {
       "id": "pop_01",
@@ -39,9 +169,152 @@
         "ui",
         "click"
       ],
-      "duration_ms": 80,
+      "duration_ms": 60,
       "public_id": "klyp/sfx/pop/pop_01",
-      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102653/klyp/sfx/pop/pop_01.wav"
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103460/klyp/sfx/pop/pop_01.wav"
+    },
+    {
+      "id": "pop_02",
+      "category": "pop",
+      "file": "pop_02.wav",
+      "label": "Soft pop",
+      "tags": [
+        "soft",
+        "ui"
+      ],
+      "duration_ms": 70,
+      "public_id": "klyp/sfx/pop/pop_02",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103461/klyp/sfx/pop/pop_02.wav"
+    },
+    {
+      "id": "pop_03",
+      "category": "pop",
+      "file": "pop_03.wav",
+      "label": "Snap",
+      "tags": [
+        "snap",
+        "click"
+      ],
+      "duration_ms": 50,
+      "public_id": "klyp/sfx/pop/pop_03",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103462/klyp/sfx/pop/pop_03.wav"
+    },
+    {
+      "id": "pop_04",
+      "category": "pop",
+      "file": "pop_04.wav",
+      "label": "Thud pop",
+      "tags": [
+        "thud",
+        "ui"
+      ],
+      "duration_ms": 80,
+      "public_id": "klyp/sfx/pop/pop_04",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103462/klyp/sfx/pop/pop_04.wav"
+    },
+    {
+      "id": "pop_05",
+      "category": "pop",
+      "file": "pop_05.wav",
+      "label": "Bubble",
+      "tags": [
+        "bubble",
+        "ui"
+      ],
+      "duration_ms": 90,
+      "public_id": "klyp/sfx/pop/pop_05",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103463/klyp/sfx/pop/pop_05.wav"
+    },
+    {
+      "id": "pop_06",
+      "category": "pop",
+      "file": "pop_06.wav",
+      "label": "Tick",
+      "tags": [
+        "tick",
+        "ui"
+      ],
+      "duration_ms": 45,
+      "public_id": "klyp/sfx/pop/pop_06",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103464/klyp/sfx/pop/pop_06.wav"
+    },
+    {
+      "id": "pop_07",
+      "category": "pop",
+      "file": "pop_07.wav",
+      "label": "Blip",
+      "tags": [
+        "blip",
+        "notification"
+      ],
+      "duration_ms": 60,
+      "public_id": "klyp/sfx/pop/pop_07",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103465/klyp/sfx/pop/pop_07.wav"
+    },
+    {
+      "id": "pop_08",
+      "category": "pop",
+      "file": "pop_08.wav",
+      "label": "Plick",
+      "tags": [
+        "plick",
+        "ui"
+      ],
+      "duration_ms": 50,
+      "public_id": "klyp/sfx/pop/pop_08",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103466/klyp/sfx/pop/pop_08.wav"
+    },
+    {
+      "id": "pop_09",
+      "category": "pop",
+      "file": "pop_09.wav",
+      "label": "Muted pop",
+      "tags": [
+        "muted",
+        "ui"
+      ],
+      "duration_ms": 70,
+      "public_id": "klyp/sfx/pop/pop_09",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103467/klyp/sfx/pop/pop_09.wav"
+    },
+    {
+      "id": "pop_10",
+      "category": "pop",
+      "file": "pop_10.wav",
+      "label": "Hi click",
+      "tags": [
+        "click",
+        "hi"
+      ],
+      "duration_ms": 40,
+      "public_id": "klyp/sfx/pop/pop_10",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103468/klyp/sfx/pop/pop_10.wav"
+    },
+    {
+      "id": "pop_11",
+      "category": "pop",
+      "file": "pop_11.wav",
+      "label": "Bass pop",
+      "tags": [
+        "bass",
+        "ui"
+      ],
+      "duration_ms": 90,
+      "public_id": "klyp/sfx/pop/pop_11",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103468/klyp/sfx/pop/pop_11.wav"
+    },
+    {
+      "id": "pop_12",
+      "category": "pop",
+      "file": "pop_12.wav",
+      "label": "Switch",
+      "tags": [
+        "switch",
+        "ui"
+      ],
+      "duration_ms": 55,
+      "public_id": "klyp/sfx/pop/pop_12",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103469/klyp/sfx/pop/pop_12.wav"
     },
     {
       "id": "whoosh_01",
@@ -52,9 +325,9 @@
         "transition",
         "air"
       ],
-      "duration_ms": 350,
+      "duration_ms": 280,
       "public_id": "klyp/sfx/whoosh/whoosh_01",
-      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102654/klyp/sfx/whoosh/whoosh_01.wav"
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103470/klyp/sfx/whoosh/whoosh_01.wav"
     },
     {
       "id": "whoosh_02",
@@ -65,9 +338,139 @@
         "transition",
         "fast"
       ],
-      "duration_ms": 280,
+      "duration_ms": 220,
       "public_id": "klyp/sfx/whoosh/whoosh_02",
-      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102655/klyp/sfx/whoosh/whoosh_02.wav"
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103471/klyp/sfx/whoosh/whoosh_02.wav"
+    },
+    {
+      "id": "whoosh_03",
+      "category": "whoosh",
+      "file": "whoosh_03.wav",
+      "label": "Long whoosh",
+      "tags": [
+        "transition",
+        "long"
+      ],
+      "duration_ms": 350,
+      "public_id": "klyp/sfx/whoosh/whoosh_03",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103472/klyp/sfx/whoosh/whoosh_03.wav"
+    },
+    {
+      "id": "whoosh_04",
+      "category": "whoosh",
+      "file": "whoosh_04.wav",
+      "label": "Short sweep",
+      "tags": [
+        "transition",
+        "short"
+      ],
+      "duration_ms": 180,
+      "public_id": "klyp/sfx/whoosh/whoosh_04",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103472/klyp/sfx/whoosh/whoosh_04.wav"
+    },
+    {
+      "id": "whoosh_05",
+      "category": "whoosh",
+      "file": "whoosh_05.wav",
+      "label": "Cloth whoosh",
+      "tags": [
+        "cloth",
+        "transition"
+      ],
+      "duration_ms": 300,
+      "public_id": "klyp/sfx/whoosh/whoosh_05",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103473/klyp/sfx/whoosh/whoosh_05.wav"
+    },
+    {
+      "id": "whoosh_06",
+      "category": "whoosh",
+      "file": "whoosh_06.wav",
+      "label": "Wind pass",
+      "tags": [
+        "wind",
+        "transition"
+      ],
+      "duration_ms": 250,
+      "public_id": "klyp/sfx/whoosh/whoosh_06",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103474/klyp/sfx/whoosh/whoosh_06.wav"
+    },
+    {
+      "id": "whoosh_07",
+      "category": "whoosh",
+      "file": "whoosh_07.wav",
+      "label": "Quick rush",
+      "tags": [
+        "fast",
+        "transition"
+      ],
+      "duration_ms": 200,
+      "public_id": "klyp/sfx/whoosh/whoosh_07",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103475/klyp/sfx/whoosh/whoosh_07.wav"
+    },
+    {
+      "id": "whoosh_08",
+      "category": "whoosh",
+      "file": "whoosh_08.wav",
+      "label": "Soft flyby",
+      "tags": [
+        "soft",
+        "transition"
+      ],
+      "duration_ms": 320,
+      "public_id": "klyp/sfx/whoosh/whoosh_08",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103476/klyp/sfx/whoosh/whoosh_08.wav"
+    },
+    {
+      "id": "whoosh_09",
+      "category": "whoosh",
+      "file": "whoosh_09.wav",
+      "label": "Stereo whoosh",
+      "tags": [
+        "wide",
+        "transition"
+      ],
+      "duration_ms": 260,
+      "public_id": "klyp/sfx/whoosh/whoosh_09",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103477/klyp/sfx/whoosh/whoosh_09.wav"
+    },
+    {
+      "id": "whoosh_10",
+      "category": "whoosh",
+      "file": "whoosh_10.wav",
+      "label": "Page whoosh",
+      "tags": [
+        "page",
+        "transition"
+      ],
+      "duration_ms": 240,
+      "public_id": "klyp/sfx/whoosh/whoosh_10",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103478/klyp/sfx/whoosh/whoosh_10.wav"
+    },
+    {
+      "id": "whoosh_11",
+      "category": "whoosh",
+      "file": "whoosh_11.wav",
+      "label": "Cinematic whoosh",
+      "tags": [
+        "cinematic",
+        "transition"
+      ],
+      "duration_ms": 290,
+      "public_id": "klyp/sfx/whoosh/whoosh_11",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103479/klyp/sfx/whoosh/whoosh_11.wav"
+    },
+    {
+      "id": "whoosh_12",
+      "category": "whoosh",
+      "file": "whoosh_12.wav",
+      "label": "Snap whoosh",
+      "tags": [
+        "snap",
+        "transition"
+      ],
+      "duration_ms": 210,
+      "public_id": "klyp/sfx/whoosh/whoosh_12",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103479/klyp/sfx/whoosh/whoosh_12.wav"
     },
     {
       "id": "riser_01",
@@ -78,9 +481,126 @@
         "zoom",
         "build"
       ],
-      "duration_ms": 500,
+      "duration_ms": 450,
       "public_id": "klyp/sfx/riser/riser_01",
-      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102655/klyp/sfx/riser/riser_01.wav"
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103480/klyp/sfx/riser/riser_01.wav"
+    },
+    {
+      "id": "riser_02",
+      "category": "riser",
+      "file": "riser_02.wav",
+      "label": "Drama riser",
+      "tags": [
+        "drama",
+        "zoom"
+      ],
+      "duration_ms": 550,
+      "public_id": "klyp/sfx/riser/riser_02",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103481/klyp/sfx/riser/riser_02.wav"
+    },
+    {
+      "id": "riser_03",
+      "category": "riser",
+      "file": "riser_03.wav",
+      "label": "Quick riser",
+      "tags": [
+        "fast",
+        "zoom"
+      ],
+      "duration_ms": 350,
+      "public_id": "klyp/sfx/riser/riser_03",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103482/klyp/sfx/riser/riser_03.wav"
+    },
+    {
+      "id": "riser_04",
+      "category": "riser",
+      "file": "riser_04.wav",
+      "label": "Deep build",
+      "tags": [
+        "deep",
+        "build"
+      ],
+      "duration_ms": 600,
+      "public_id": "klyp/sfx/riser/riser_04",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103482/klyp/sfx/riser/riser_04.wav"
+    },
+    {
+      "id": "riser_05",
+      "category": "riser",
+      "file": "riser_05.wav",
+      "label": "Bright riser",
+      "tags": [
+        "bright",
+        "zoom"
+      ],
+      "duration_ms": 400,
+      "public_id": "klyp/sfx/riser/riser_05",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103483/klyp/sfx/riser/riser_05.wav"
+    },
+    {
+      "id": "riser_06",
+      "category": "riser",
+      "file": "riser_06.wav",
+      "label": "Tension",
+      "tags": [
+        "tension",
+        "build"
+      ],
+      "duration_ms": 500,
+      "public_id": "klyp/sfx/riser/riser_06",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103484/klyp/sfx/riser/riser_06.wav"
+    },
+    {
+      "id": "riser_07",
+      "category": "riser",
+      "file": "riser_07.wav",
+      "label": "Lift",
+      "tags": [
+        "lift",
+        "zoom"
+      ],
+      "duration_ms": 380,
+      "public_id": "klyp/sfx/riser/riser_07",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103485/klyp/sfx/riser/riser_07.wav"
+    },
+    {
+      "id": "riser_08",
+      "category": "riser",
+      "file": "riser_08.wav",
+      "label": "Pulse riser",
+      "tags": [
+        "pulse",
+        "build"
+      ],
+      "duration_ms": 480,
+      "public_id": "klyp/sfx/riser/riser_08",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103485/klyp/sfx/riser/riser_08.wav"
+    },
+    {
+      "id": "riser_09",
+      "category": "riser",
+      "file": "riser_09.wav",
+      "label": "Energy rise",
+      "tags": [
+        "energy",
+        "zoom"
+      ],
+      "duration_ms": 420,
+      "public_id": "klyp/sfx/riser/riser_09",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103486/klyp/sfx/riser/riser_09.wav"
+    },
+    {
+      "id": "riser_10",
+      "category": "riser",
+      "file": "riser_10.wav",
+      "label": "Slow swell",
+      "tags": [
+        "slow",
+        "build"
+      ],
+      "duration_ms": 520,
+      "public_id": "klyp/sfx/riser/riser_10",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103487/klyp/sfx/riser/riser_10.wav"
     },
     {
       "id": "swipe_01",
@@ -91,9 +611,9 @@
         "overlay",
         "cut"
       ],
-      "duration_ms": 220,
+      "duration_ms": 160,
       "public_id": "klyp/sfx/swipe/swipe_01",
-      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102656/klyp/sfx/swipe/swipe_01.wav"
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103487/klyp/sfx/swipe/swipe_01.wav"
     },
     {
       "id": "swipe_02",
@@ -104,9 +624,139 @@
         "overlay",
         "page"
       ],
-      "duration_ms": 200,
+      "duration_ms": 180,
       "public_id": "klyp/sfx/swipe/swipe_02",
-      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102657/klyp/sfx/swipe/swipe_02.wav"
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103488/klyp/sfx/swipe/swipe_02.wav"
+    },
+    {
+      "id": "swipe_03",
+      "category": "swipe",
+      "file": "swipe_03.wav",
+      "label": "Quick swipe",
+      "tags": [
+        "fast",
+        "cut"
+      ],
+      "duration_ms": 140,
+      "public_id": "klyp/sfx/swipe/swipe_03",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103489/klyp/sfx/swipe/swipe_03.wav"
+    },
+    {
+      "id": "swipe_04",
+      "category": "swipe",
+      "file": "swipe_04.wav",
+      "label": "Reverse swipe",
+      "tags": [
+        "reverse",
+        "cut"
+      ],
+      "duration_ms": 200,
+      "public_id": "klyp/sfx/swipe/swipe_04",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103490/klyp/sfx/swipe/swipe_04.wav"
+    },
+    {
+      "id": "swipe_05",
+      "category": "swipe",
+      "file": "swipe_05.wav",
+      "label": "Card swipe",
+      "tags": [
+        "card",
+        "overlay"
+      ],
+      "duration_ms": 150,
+      "public_id": "klyp/sfx/swipe/swipe_05",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103491/klyp/sfx/swipe/swipe_05.wav"
+    },
+    {
+      "id": "swipe_06",
+      "category": "swipe",
+      "file": "swipe_06.wav",
+      "label": "Soft swipe",
+      "tags": [
+        "soft",
+        "overlay"
+      ],
+      "duration_ms": 170,
+      "public_id": "klyp/sfx/swipe/swipe_06",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103492/klyp/sfx/swipe/swipe_06.wav"
+    },
+    {
+      "id": "swipe_07",
+      "category": "swipe",
+      "file": "swipe_07.wav",
+      "label": "Flick",
+      "tags": [
+        "flick",
+        "cut"
+      ],
+      "duration_ms": 130,
+      "public_id": "klyp/sfx/swipe/swipe_07",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103492/klyp/sfx/swipe/swipe_07.wav"
+    },
+    {
+      "id": "swipe_08",
+      "category": "swipe",
+      "file": "swipe_08.wav",
+      "label": "Slide in",
+      "tags": [
+        "slide",
+        "overlay"
+      ],
+      "duration_ms": 190,
+      "public_id": "klyp/sfx/swipe/swipe_08",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103493/klyp/sfx/swipe/swipe_08.wav"
+    },
+    {
+      "id": "swipe_09",
+      "category": "swipe",
+      "file": "swipe_09.wav",
+      "label": "Slide out",
+      "tags": [
+        "slide",
+        "cut"
+      ],
+      "duration_ms": 160,
+      "public_id": "klyp/sfx/swipe/swipe_09",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103494/klyp/sfx/swipe/swipe_09.wav"
+    },
+    {
+      "id": "swipe_10",
+      "category": "swipe",
+      "file": "swipe_10.wav",
+      "label": "Wipe",
+      "tags": [
+        "wipe",
+        "overlay"
+      ],
+      "duration_ms": 150,
+      "public_id": "klyp/sfx/swipe/swipe_10",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103495/klyp/sfx/swipe/swipe_10.wav"
+    },
+    {
+      "id": "swipe_11",
+      "category": "swipe",
+      "file": "swipe_11.wav",
+      "label": "Panel swipe",
+      "tags": [
+        "panel",
+        "overlay"
+      ],
+      "duration_ms": 180,
+      "public_id": "klyp/sfx/swipe/swipe_11",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103495/klyp/sfx/swipe/swipe_11.wav"
+    },
+    {
+      "id": "swipe_12",
+      "category": "swipe",
+      "file": "swipe_12.wav",
+      "label": "Snap wipe",
+      "tags": [
+        "snap",
+        "cut"
+      ],
+      "duration_ms": 140,
+      "public_id": "klyp/sfx/swipe/swipe_12",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790103496/klyp/sfx/swipe/swipe_12.wav"
     }
   ]
 }
