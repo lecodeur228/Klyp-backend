@@ -23,6 +23,7 @@ from app.pipeline.transcription.qa_check import evaluate_sync_qa
 from app.schemas.analysis import AnalysisPublic, AnalysisStarted
 from app.services.credits import service as credits_service
 from app.services.jobs import service as jobs_service
+from app.services.projects import service as projects_service
 from app.services.videos import service as videos_service
 
 JOB_TYPE_VIDEO_ANALYZE = "video.analyze"
@@ -252,6 +253,17 @@ async def complete_analysis_inline(
         "needs_review": bool(qa.get("needs_review")),
     }
     job.completed_at = datetime.now(UTC)
+
+    renamed = await projects_service.maybe_rename_from_transcript(
+        session,
+        video_id=analysis.video_id,
+        segments=analysis.segments,
+    )
+    if renamed:
+        job.result_payload = {
+            **(job.result_payload or {}),
+            "project_title": renamed,
+        }
 
     await session.flush()
     await session.refresh(analysis)
