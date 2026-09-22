@@ -188,12 +188,24 @@ def test_words_from_analysis():
 
 
 def test_sounds_manifest_and_search_helpers():
-    from app.api.v1.sounds import _matches_query, _serialize_assets
-    from app.pipeline.sound_design.placement import load_manifest, resolve_asset_path
+    from app.api.v1.sounds import _matches_query, _serialize_asset
+    from app.pipeline.sound_design.placement import (
+        clear_manifest_cache,
+        load_manifest,
+        resolve_asset_path,
+        resolve_asset_url,
+    )
 
-    assets = _serialize_assets(list(load_manifest().get("assets") or []))
+    clear_manifest_cache()
+    assets = [
+        _serialize_asset(a)
+        for a in load_manifest().get("assets") or []
+        if isinstance(a, dict)
+    ]
     assert len(assets) >= 1
     assert resolve_asset_path(assets[0]["id"]) is not None
     assert resolve_asset_path("__missing__") is None
+    assert resolve_asset_url("__missing__") is None
     assert any(_matches_query(a, "whoosh") for a in assets)
+    assert any(_matches_query(a, "emphasis") for a in assets)  # tag search
     assert not any(_matches_query(a, "zzzz-missing") for a in assets)

@@ -1,13 +1,112 @@
 {
-  "license": "Bundled procedural stubs for local/dev. Replace with commercial SFX (Envato/Storyblocks) for production.",
+  "license": "Bundled procedural stubs for local/dev. Upload to Cloudinary via scripts/import_sfx_cloudinary.py for production CDN. Replace with commercial short-form SFX (licence export UGC OK) when scaling the library.",
+  "storage": "cloudinary",
+  "folder": "klyp/sfx",
   "assets": [
-    {"id": "chime_01", "category": "chime", "file": "chime_01.wav", "label": "Soft chime"},
-    {"id": "chime_02", "category": "chime", "file": "chime_02.wav", "label": "Bright chime"},
-    {"id": "pop_01", "category": "pop", "file": "pop_01.wav", "label": "UI pop"},
-    {"id": "whoosh_01", "category": "whoosh", "file": "whoosh_01.wav", "label": "Air whoosh"},
-    {"id": "whoosh_02", "category": "whoosh", "file": "whoosh_02.wav", "label": "Fast whoosh"},
-    {"id": "riser_01", "category": "riser", "file": "riser_01.wav", "label": "Soft riser"},
-    {"id": "swipe_01", "category": "swipe", "file": "swipe_01.wav", "label": "Swipe"},
-    {"id": "swipe_02", "category": "swipe", "file": "swipe_02.wav", "label": "Page swipe"}
+    {
+      "id": "chime_01",
+      "category": "chime",
+      "file": "chime_01.wav",
+      "label": "Soft chime",
+      "tags": [
+        "soft",
+        "emphasis",
+        "notification"
+      ],
+      "duration_ms": 180,
+      "public_id": "klyp/sfx/chime/chime_01",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102651/klyp/sfx/chime/chime_01.wav"
+    },
+    {
+      "id": "chime_02",
+      "category": "chime",
+      "file": "chime_02.wav",
+      "label": "Bright chime",
+      "tags": [
+        "bright",
+        "emphasis"
+      ],
+      "duration_ms": 150,
+      "public_id": "klyp/sfx/chime/chime_02",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102652/klyp/sfx/chime/chime_02.wav"
+    },
+    {
+      "id": "pop_01",
+      "category": "pop",
+      "file": "pop_01.wav",
+      "label": "UI pop",
+      "tags": [
+        "ui",
+        "click"
+      ],
+      "duration_ms": 80,
+      "public_id": "klyp/sfx/pop/pop_01",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102653/klyp/sfx/pop/pop_01.wav"
+    },
+    {
+      "id": "whoosh_01",
+      "category": "whoosh",
+      "file": "whoosh_01.wav",
+      "label": "Air whoosh",
+      "tags": [
+        "transition",
+        "air"
+      ],
+      "duration_ms": 350,
+      "public_id": "klyp/sfx/whoosh/whoosh_01",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102654/klyp/sfx/whoosh/whoosh_01.wav"
+    },
+    {
+      "id": "whoosh_02",
+      "category": "whoosh",
+      "file": "whoosh_02.wav",
+      "label": "Fast whoosh",
+      "tags": [
+        "transition",
+        "fast"
+      ],
+      "duration_ms": 280,
+      "public_id": "klyp/sfx/whoosh/whoosh_02",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102655/klyp/sfx/whoosh/whoosh_02.wav"
+    },
+    {
+      "id": "riser_01",
+      "category": "riser",
+      "file": "riser_01.wav",
+      "label": "Soft riser",
+      "tags": [
+        "zoom",
+        "build"
+      ],
+      "duration_ms": 500,
+      "public_id": "klyp/sfx/riser/riser_01",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102655/klyp/sfx/riser/riser_01.wav"
+    },
+    {
+      "id": "swipe_01",
+      "category": "swipe",
+      "file": "swipe_01.wav",
+      "label": "Swipe",
+      "tags": [
+        "overlay",
+        "cut"
+      ],
+      "duration_ms": 220,
+      "public_id": "klyp/sfx/swipe/swipe_01",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102656/klyp/sfx/swipe/swipe_01.wav"
+    },
+    {
+      "id": "swipe_02",
+      "category": "swipe",
+      "file": "swipe_02.wav",
+      "label": "Page swipe",
+      "tags": [
+        "overlay",
+        "page"
+      ],
+      "duration_ms": 200,
+      "public_id": "klyp/sfx/swipe/swipe_02",
+      "secure_url": "https://res.cloudinary.com/ut9wbcyl/video/upload/v1790102657/klyp/sfx/swipe/swipe_02.wav"
+    }
   ]
 }
