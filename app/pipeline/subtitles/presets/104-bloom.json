@@ -1,0 +1,44 @@
+{
+  "id": "104-bloom",
+  "name": "Bloom",
+  "label": "Bloom",
+  "category": "nature-lifestyle",
+  "featured": false,
+  "font": {
+    "family": "Righteous",
+    "weight": "400",
+    "case": "mixed"
+  },
+  "font_family": "Righteous",
+  "bold": false,
+  "animation": "bounce_drop",
+  "easing": "ease-out-bounce",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#3A3A3A",
+    "highlight": "#FFB6C1",
+    "css_text": "#3A3A3A",
+    "css_highlight": "#FFB6C1",
+    "primary_ass": "&H003A3A3A",
+    "highlight_ass": "&H00C1B6FF",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "word_highlight",
+    "color": "#FFF5F7",
+    "opacity": 0.7
+  },
+  "stroke": {
+    "width": 1,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "bounce_drop",
+    "duration_ms": 220,
+    "easing": "ease-out-bounce"
+  }
+}

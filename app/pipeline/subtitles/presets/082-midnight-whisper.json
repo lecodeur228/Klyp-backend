@@ -1,0 +1,44 @@
+{
+  "id": "082-midnight-whisper",
+  "name": "Midnight Whisper",
+  "label": "Midnight Whisper",
+  "category": "dark-horror",
+  "featured": false,
+  "font": {
+    "family": "Oswald",
+    "weight": "700",
+    "case": "mixed"
+  },
+  "font_family": "Oswald",
+  "bold": true,
+  "animation": "blur_focus",
+  "easing": "ease-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#8B0000",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#8B0000",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H0000008B",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": "#000000",
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 1,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "blur_focus",
+    "duration_ms": 200,
+    "easing": "ease-out"
+  }
+}

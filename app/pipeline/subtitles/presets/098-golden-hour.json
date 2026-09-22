@@ -1,0 +1,44 @@
+{
+  "id": "098-golden-hour",
+  "name": "Golden Hour",
+  "label": "Golden Hour",
+  "category": "nature-lifestyle",
+  "featured": false,
+  "font": {
+    "family": "Playfair Display",
+    "weight": "700",
+    "case": "mixed"
+  },
+  "font_family": "Playfair Display",
+  "bold": true,
+  "animation": "fade_slide_up",
+  "easing": "ease-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#FF7A59",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#FF7A59",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H00597AFF",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": null,
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 0,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "fade_slide_up",
+    "duration_ms": 150,
+    "easing": "ease-out"
+  }
+}

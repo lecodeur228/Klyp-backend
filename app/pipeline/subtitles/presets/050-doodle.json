@@ -1,0 +1,44 @@
+{
+  "id": "050-doodle",
+  "name": "Doodle",
+  "label": "Doodle",
+  "category": "playful",
+  "featured": false,
+  "font": {
+    "family": "Caveat",
+    "weight": "700",
+    "case": "mixed"
+  },
+  "font_family": "Caveat",
+  "bold": true,
+  "animation": "bounce_drop",
+  "easing": "ease-out-bounce",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#1A1A1A",
+    "highlight": "#FFE135",
+    "css_text": "#1A1A1A",
+    "css_highlight": "#FFE135",
+    "primary_ass": "&H001A1A1A",
+    "highlight_ass": "&H0035E1FF",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": null,
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 0,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "bounce_drop",
+    "duration_ms": 220,
+    "easing": "ease-out-bounce"
+  }
+}

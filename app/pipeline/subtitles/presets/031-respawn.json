@@ -1,0 +1,44 @@
+{
+  "id": "031-respawn",
+  "name": "Respawn",
+  "label": "Respawn",
+  "category": "neon-gaming",
+  "featured": false,
+  "font": {
+    "family": "Righteous",
+    "weight": "400",
+    "case": "uppercase"
+  },
+  "font_family": "Righteous",
+  "bold": false,
+  "animation": "elastic_scale",
+  "easing": "ease-out-elastic",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#2DE1FC",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#2DE1FC",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H00FCE12D",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "word_highlight",
+    "color": null,
+    "opacity": 0.7
+  },
+  "stroke": {
+    "width": 2,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "elastic_scale",
+    "duration_ms": 280,
+    "easing": "ease-out-elastic"
+  }
+}

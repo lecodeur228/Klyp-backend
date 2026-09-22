@@ -1,0 +1,44 @@
+{
+  "id": "087-suspense",
+  "name": "Suspense",
+  "label": "Suspense",
+  "category": "dark-horror",
+  "featured": false,
+  "font": {
+    "family": "Inter",
+    "weight": "700",
+    "case": "mixed"
+  },
+  "font_family": "Inter",
+  "bold": true,
+  "animation": "glow_pulse",
+  "easing": "ease-in-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#8B0000",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#8B0000",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H0000008B",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "word_highlight",
+    "color": "#000000",
+    "opacity": 0.7
+  },
+  "stroke": {
+    "width": 1,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "glow_pulse",
+    "duration_ms": 400,
+    "easing": "ease-in-out"
+  }
+}

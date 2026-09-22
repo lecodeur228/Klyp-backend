@@ -42,7 +42,18 @@ async def health(session: DbSession, settings: AppSettings, locale: LocaleDep):
     }[status]
 
     return success_response(
-        {"status": status, "checks": checks},
+        {
+            "status": status,
+            "checks": checks,
+            "integrations": {
+                "ai_provider": settings.ai_provider,
+                "rodiumai": "configured" if settings.rodiumai_configured else "missing_key",
+                "storage_backend": settings.storage_backend,
+                "cloudinary": (
+                    "configured" if settings.cloudinary_configured else "missing_credentials"
+                ),
+            },
+        },
         translate(message_key, locale),
         status_code=http_status,
     )

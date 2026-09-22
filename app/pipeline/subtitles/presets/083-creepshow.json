@@ -1,0 +1,44 @@
+{
+  "id": "083-creepshow",
+  "name": "Creepshow",
+  "label": "Creepshow",
+  "category": "dark-horror",
+  "featured": false,
+  "font": {
+    "family": "Permanent Marker",
+    "weight": "400",
+    "case": "uppercase"
+  },
+  "font_family": "Permanent Marker",
+  "bold": false,
+  "animation": "shake_punch",
+  "easing": "ease-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#8B0000",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#8B0000",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H0000008B",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": "#000000",
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 2,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "center",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "shake_punch",
+    "duration_ms": 160,
+    "easing": "ease-out"
+  }
+}

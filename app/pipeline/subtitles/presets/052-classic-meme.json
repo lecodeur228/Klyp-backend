@@ -1,0 +1,44 @@
+{
+  "id": "052-classic-meme",
+  "name": "Classic Meme",
+  "label": "Classic Meme",
+  "category": "playful",
+  "featured": false,
+  "font": {
+    "family": "Archivo Black",
+    "weight": "400",
+    "case": "uppercase"
+  },
+  "font_family": "Archivo Black",
+  "bold": false,
+  "animation": "pop_scale",
+  "easing": "ease-out-back",
+  "safe_margin_v": 120,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#FFFFFF",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#FFFFFF",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H00FFFFFF",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": "#000000",
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 4,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "top",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "pop_scale",
+    "duration_ms": 180,
+    "easing": "ease-out-back"
+  }
+}

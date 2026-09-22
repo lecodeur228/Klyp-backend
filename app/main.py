@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.api.router import api_router
+from app.api.ws import jobs as ws_jobs
 from app.core.config import get_settings
 from app.core.constants import ErrorCode
 from app.core.exceptions import AppException, exception_to_body
@@ -64,6 +65,7 @@ def create_app() -> FastAPI:
         return error_response(message, ErrorCode.SERVER_ERROR.value, status_code=500)
 
     app.include_router(api_router)
+    app.include_router(ws_jobs.router)
     return app
 
 

@@ -1,0 +1,44 @@
+{
+  "id": "079-sepia-tone",
+  "name": "Sepia Tone",
+  "label": "Sepia Tone",
+  "category": "retro",
+  "featured": false,
+  "font": {
+    "family": "Playfair Display",
+    "weight": "700",
+    "case": "mixed"
+  },
+  "font_family": "Playfair Display",
+  "bold": true,
+  "animation": "fade_slide_up",
+  "easing": "ease-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#3E2C1C",
+    "highlight": "#A85C32",
+    "css_text": "#3E2C1C",
+    "css_highlight": "#A85C32",
+    "primary_ass": "&H001C2C3E",
+    "highlight_ass": "&H00325CA8",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": null,
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 0,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "fade_slide_up",
+    "duration_ms": 150,
+    "easing": "ease-out"
+  }
+}

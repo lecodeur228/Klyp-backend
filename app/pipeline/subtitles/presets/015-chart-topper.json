@@ -1,0 +1,44 @@
+{
+  "id": "015-chart-topper",
+  "name": "Chart Topper",
+  "label": "Chart Topper",
+  "category": "bold-punchy",
+  "featured": false,
+  "font": {
+    "family": "Anton",
+    "weight": "400",
+    "case": "uppercase"
+  },
+  "font_family": "Anton",
+  "bold": false,
+  "animation": "highlight_sweep",
+  "easing": "ease-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#FF1B6B",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#FF1B6B",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H006B1BFF",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "gradient",
+    "color": null,
+    "opacity": 0.7
+  },
+  "stroke": {
+    "width": 0,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "highlight_sweep",
+    "duration_ms": 200,
+    "easing": "ease-out"
+  }
+}

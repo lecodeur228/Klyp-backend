@@ -1,0 +1,44 @@
+{
+  "id": "054-scribble",
+  "name": "Scribble",
+  "label": "Scribble",
+  "category": "playful",
+  "featured": false,
+  "font": {
+    "family": "Caveat",
+    "weight": "700",
+    "case": "mixed"
+  },
+  "font_family": "Caveat",
+  "bold": true,
+  "animation": "shake_punch",
+  "easing": "ease-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#FF1B6B",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#FF1B6B",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H006B1BFF",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": null,
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 0,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "bottom",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "shake_punch",
+    "duration_ms": 160,
+    "easing": "ease-out"
+  }
+}

@@ -23,6 +23,7 @@ dependencies = [
     "greenlet>=3.1.0",
     "aiofiles>=25.1.0",
     "psycopg[binary]>=3.3.6",
+    "cloudinary>=1.46.2",
 ]
 
 [dependency-groups]
@@ -37,6 +38,13 @@ dev = [
     "types-PyJWT>=1.7.1",
     "types-redis>=4.6.0",
     "aiosqlite>=0.20.0",
+]
+# Optional local WhisperX (uv sync --group asr).
+# Note: torch/whisperx need arm64 mac or Linux; on Intel mac auto falls back to Rodium
+# after 16kHz WAV extract.
+asr = [
+    "torch>=2.2.0; sys_platform != 'darwin' or platform_machine == 'arm64'",
+    "whisperx>=3.3.0; sys_platform != 'darwin' or platform_machine == 'arm64'",
 ]
 
 [tool.uv]
@@ -63,7 +71,7 @@ mypy_path = "."
 packages = ["app"]
 
 [[tool.mypy.overrides]]
-module = ["celery.*", "passlib.*", "aiofiles.*", "redis.*"]
+module = ["celery.*", "passlib.*", "aiofiles.*", "redis.*", "whisperx.*", "torch.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

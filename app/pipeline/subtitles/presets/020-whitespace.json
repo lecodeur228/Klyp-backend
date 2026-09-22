@@ -1,0 +1,44 @@
+{
+  "id": "020-whitespace",
+  "name": "Whitespace",
+  "label": "Whitespace",
+  "category": "minimal-clean",
+  "featured": false,
+  "font": {
+    "family": "Inter",
+    "weight": "700",
+    "case": "mixed"
+  },
+  "font_family": "Inter",
+  "bold": true,
+  "animation": "blur_focus",
+  "easing": "ease-out",
+  "safe_margin_v": 200,
+  "colors": {
+    "text": "#FFFFFF",
+    "highlight": "#FFFFFF",
+    "css_text": "#FFFFFF",
+    "css_highlight": "#FFFFFF",
+    "primary_ass": "&H00FFFFFF",
+    "highlight_ass": "&H00FFFFFF",
+    "outline_ass": "&H00000000"
+  },
+  "background": {
+    "type": "none",
+    "color": "#000000",
+    "opacity": 0.0
+  },
+  "stroke": {
+    "width": 0,
+    "color": "#000000"
+  },
+  "position": {
+    "anchor": "center",
+    "offset_y": 120
+  },
+  "animation_detail": {
+    "type": "blur_focus",
+    "duration_ms": 200,
+    "easing": "ease-out"
+  }
+}

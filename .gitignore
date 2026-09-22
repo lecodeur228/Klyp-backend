@@ -20,6 +20,8 @@ htmlcov/
 # Runtime
 storage/uploads/*
 !storage/uploads/.gitkeep
+storage/*.db
+storage/*.db-*
 *.db
 *.sqlite3
 
