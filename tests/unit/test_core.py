@@ -44,6 +44,19 @@ def test_prompt_registry() -> None:
         source_video_id="v1",
     )
     assert "cut silence" in edit_user
+    creative = get_prompt("creative_plan")
+    assert creative.version == "1.4.0"
+    _, creative_user, _ = render_prompt(
+        "creative_plan",
+        user_brief="Rythme TikTok, coupe les silences",
+        source_video_id="v1",
+        duration="12",
+        aspect="9:16",
+        transcript="hello",
+        keep_ranges="0-10",
+    )
+    assert "Rythme TikTok" in creative_user
+    assert "User brief" in creative_user
 
 
 async def test_fake_provider_generate() -> None:

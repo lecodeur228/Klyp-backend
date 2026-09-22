@@ -6,7 +6,11 @@ from app.api.dependencies import AppSettings, CurrentUser, DbSession, LocaleDep
 from app.core.responses import accepted_response, success_response
 from app.i18n.messages import translate
 from app.schemas.captions import CaptionsGenerateRequest, CaptionsPatchRequest
-from app.schemas.editplan import AiEditRequest, CreativePlanValidateRequest
+from app.schemas.editplan import (
+    AiEditRequest,
+    CreativePlanStartRequest,
+    CreativePlanValidateRequest,
+)
 from app.services.analysis import service as analysis_service
 from app.services.captions import service as captions_service
 from app.services.creative import service as creative_service
@@ -195,10 +199,14 @@ async def start_creative_plan(
     user: CurrentUser,
     locale: LocaleDep,
     settings: AppSettings,
+    body: CreativePlanStartRequest = CreativePlanStartRequest(),
 ):
     await videos_service.get_owned_video(session, user_id=user.id, video_id=video_id)
     await creative_service.run_creative_plan_for_video(
-        session, video_id=video_id, settings=settings
+        session,
+        video_id=video_id,
+        settings=settings,
+        user_prompt=body.prompt,
     )
     payload = await creative_service.get_creative_plan(
         session, user_id=user.id, video_id=video_id
