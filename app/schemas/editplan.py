@@ -151,6 +151,12 @@ class CreativePlanValidateRequest(BaseModel):
     overlay_layouts: list[OverlayLayoutPatch] = Field(default_factory=list)
 
 
+class CreativePlanZoom(BaseModel):
+    start: float = Field(ge=0)
+    end: float = Field(gt=0)
+    scale: float = Field(gt=1.0, le=5.0)
+
+
 class CreativePlanPublic(BaseModel):
     video_id: str
     project_id: str
@@ -162,6 +168,7 @@ class CreativePlanPublic(BaseModel):
     captions_scale: CaptionScale = "md"
     overlays: list[VisualOverlay] = Field(default_factory=list)
     timeline_segments: list[TimelineSegment] = Field(default_factory=list)
+    zooms: list[CreativePlanZoom] = Field(default_factory=list)
     validated: bool = False
 
 

@@ -118,6 +118,7 @@ def _vad_silences(
     *,
     duration: float,
     edge_pad: float = EDGE_PAD_S,
+    min_silence: float = MIN_SILENCE_S,
 ) -> list[tuple[float, float]]:
     out: list[tuple[float, float]] = []
     for s in vad_segments or []:
@@ -133,7 +134,7 @@ def _vad_silences(
         # Shrink VAD silence so we keep audio at speech boundaries
         cut_start = start + edge_pad
         cut_end = end - edge_pad
-        if cut_end - cut_start >= MIN_CUT_S and cut_end - cut_start >= MIN_SILENCE_S * 0.6:
+        if cut_end - cut_start >= MIN_CUT_S and cut_end - cut_start >= min_silence * 0.6:
             out.append((cut_start, cut_end))
     return out
 
@@ -170,18 +171,57 @@ def build_cut_ranges(
     segments: list[dict[str, Any]] | None = None,
     vad_segments: list[dict[str, Any]] | None = None,
     fillers: list[dict[str, Any]] | None = None,
+    min_silence: float = MIN_SILENCE_S,
+    edge_pad: float = EDGE_PAD_S,
 ) -> list[tuple[float, float]]:
     """Merged ranges to remove (silence + fillers)."""
     total = duration if duration and duration > 0 else 0.1
     cuts: list[tuple[float, float]] = []
-    vad = _vad_silences(vad_segments, duration=total)
+    vad = _vad_silences(
+        vad_segments, duration=total, edge_pad=edge_pad, min_silence=min_silence
+    )
     if vad:
         cuts.extend(vad)
     else:
         speech = _speech_points(segments)
-        cuts.extend(_gap_silences(speech, duration=total))
+        cuts.extend(
+            _gap_silences(
+                speech,
+                duration=total,
+                min_silence=min_silence,
+                edge_pad=edge_pad,
+            )
+        )
     cuts.extend(_filler_cuts(fillers, duration=total))
     return _merge_ranges(cuts)
+
+
+def build_keep_segments(
+    *,
+    duration: float,
+    segments: list[dict[str, Any]] | None = None,
+    vad_segments: list[dict[str, Any]] | None = None,
+    fillers: list[dict[str, Any]] | None = None,
+    aggressiveness: float = 1.0,
+) -> list[TimelineSegment]:
+    """Build keep ranges. aggressiveness > 1 → tighter silence cuts (pace briefs)."""
+    agg = max(1.0, min(float(aggressiveness), 2.5))
+    min_silence = max(0.35, MIN_SILENCE_S / agg)
+    edge_pad = max(0.08, EDGE_PAD_S / min(agg, 1.8))
+    cuts = build_cut_ranges(
+        duration=duration,
+        segments=segments,
+        vad_segments=vad_segments,
+        fillers=fillers,
+        min_silence=min_silence,
+        edge_pad=edge_pad,
+    )
+    keeps = keep_ranges_from_cuts(cuts, duration=duration)
+    keeps = _expand_keeps(keeps, duration=duration)
+    return [
+        TimelineSegment(id=f"keep-{i + 1}", start=round(a, 3), end=round(b, 3))
+        for i, (a, b) in enumerate(keeps)
+    ]
 
 
 def keep_ranges_from_cuts(
@@ -219,27 +259,6 @@ def _expand_keeps(
         for a, b in keeps
     ]
     return _merge_ranges(expanded) or [(0.0, duration)]
-
-
-def build_keep_segments(
-    *,
-    duration: float,
-    segments: list[dict[str, Any]] | None = None,
-    vad_segments: list[dict[str, Any]] | None = None,
-    fillers: list[dict[str, Any]] | None = None,
-) -> list[TimelineSegment]:
-    cuts = build_cut_ranges(
-        duration=duration,
-        segments=segments,
-        vad_segments=vad_segments,
-        fillers=fillers,
-    )
-    keeps = keep_ranges_from_cuts(cuts, duration=duration)
-    keeps = _expand_keeps(keeps, duration=duration)
-    return [
-        TimelineSegment(id=f"keep-{i + 1}", start=round(a, 3), end=round(b, 3))
-        for i, (a, b) in enumerate(keeps)
-    ]
 
 
 def source_to_output(t: float, keeps: list[tuple[float, float]]) -> float | None:

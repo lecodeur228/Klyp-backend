@@ -21,6 +21,7 @@ from app.models.analysis import VideoAnalysis
 from app.models.asset import Asset
 from app.models.edit_plan import EditPlan
 from app.models.job import Job
+from app.pipeline.enrich import enrich_edit_plan
 from app.schemas.editplan import (
     AiEditStarted,
     AudioConfig,
@@ -38,6 +39,31 @@ from app.schemas.editplan import (
 from app.services.credits import service as credits_service
 from app.services.jobs import service as jobs_service
 from app.services.projects import service as projects_service
+
+_PACE_KEYS = (
+    "rythme",
+    "pace",
+    "rapide",
+    "faster",
+    "punchy",
+    "énergie",
+    "energie",
+    "energy",
+    "coupe",
+    "cut",
+)
+_ZOOM_KEYS = ("zoom", "punch", "dynamique", "proche", "close")
+
+
+def _prompt_zoom_budget(prompt: str) -> float:
+    p = prompt.lower()
+    if any(k in p for k in _ZOOM_KEYS) or any(k in p for k in _PACE_KEYS):
+        return 7.0
+    return 4.0
+
+
+def _prompt_wants_pace(prompt: str) -> bool:
+    return any(k in prompt.lower() for k in _PACE_KEYS)
 from app.services.videos import service as videos_service
 
 JOB_TYPE_AI_EDIT = "ai_edit"
@@ -59,11 +85,14 @@ def build_fake_edit_plan(
 ) -> EditPlanDocument:
     """Deterministic EditPlan for tests / AI_PROVIDER=fake."""
     total = duration if duration and duration > 0 else 30.0
+    pace = _prompt_wants_pace(prompt)
+    min_silence = 0.25 if pace else 0.45
     silences = sorted(
         [
             (float(s["start"]), float(s["end"]))
             for s in (vad_segments or [])
             if s.get("kind", "silence") == "silence"
+            and float(s.get("end", 0)) - float(s.get("start", 0)) >= min_silence
         ],
         key=lambda x: x[0],
     )
@@ -95,9 +124,28 @@ def build_fake_edit_plan(
             type="zoom",
             start=round(max(0.0, mid - 1.0), 3),
             end=round(min(total, mid + 1.0), 3),
-            scale=1.2,
+            scale=1.35 if pace else 1.2,
         ),
     ]
+    if pace or any(k in prompt.lower() for k in _ZOOM_KEYS):
+        q1 = total * 0.25
+        q3 = total * 0.75
+        operations.extend(
+            [
+                ZoomOperation(
+                    type="zoom",
+                    start=round(max(0.0, q1 - 0.6), 3),
+                    end=round(min(total, q1 + 0.8), 3),
+                    scale=1.25,
+                ),
+                ZoomOperation(
+                    type="zoom",
+                    start=round(max(0.0, q3 - 0.6), 3),
+                    end=round(min(total, q3 + 0.8), 3),
+                    scale=1.3,
+                ),
+            ]
+        )
 
     # Prompt hint: if user mentions denoise, enable it
     want_denoise = "denoise" in prompt.lower() or "bruit" in prompt.lower()
@@ -107,7 +155,12 @@ def build_fake_edit_plan(
         source_video_id=source_video_id,
         timeline=Timeline(segments=segments),
         operations=operations,
-        captions=CaptionsConfig(enabled=True, style="dynamic", theme="prism"),
+        captions=CaptionsConfig(
+            enabled=True,
+            style="dynamic",
+            theme="prism",
+            scale="lg" if pace else "md",
+        ),
         visual_style="prism",
         overlays=[],
         audio=AudioConfig(denoise=want_denoise or True, normalize=True),
@@ -312,6 +365,26 @@ async def start_ai_edit(
     )
 
 
+def _finalize_edit_plan(
+    document: EditPlanDocument,
+    *,
+    duration: float,
+    analysis: VideoAnalysis,
+    prompt: str,
+) -> EditPlanDocument:
+    validated = ensure_valid_edit_plan(document, duration=duration)
+    return enrich_edit_plan(
+        plan=validated,
+        duration=duration,
+        analysis_segments=list(analysis.segments or []),
+        global_subject=(prompt or "")[:120] or None,
+        art_direction="vibe-edit consistent palette",
+        needs_review=False,
+        dry_run=False,
+        zoom_budget_per_min=_prompt_zoom_budget(prompt),
+    )
+
+
 async def generate_edit_plan_document(
     session: AsyncSession,
     *,
@@ -323,7 +396,7 @@ async def generate_edit_plan_document(
     settings: Settings,
 ) -> EditPlanDocument:
     if settings.ai_provider == "fake" or settings.app_env == "test":
-        return ensure_valid_edit_plan(
+        return _finalize_edit_plan(
             build_fake_edit_plan(
                 source_video_id=video_id,
                 duration=duration,
@@ -331,10 +404,12 @@ async def generate_edit_plan_document(
                 prompt=prompt,
             ),
             duration=duration,
+            analysis=analysis,
+            prompt=prompt,
         )
 
     def _fallback() -> EditPlanDocument:
-        return ensure_valid_edit_plan(
+        return _finalize_edit_plan(
             build_fake_edit_plan(
                 source_video_id=video_id,
                 duration=duration,
@@ -342,6 +417,8 @@ async def generate_edit_plan_document(
                 prompt=prompt,
             ),
             duration=duration,
+            analysis=analysis,
+            prompt=prompt,
         )
 
     provider = build_provider(settings)
@@ -369,7 +446,12 @@ async def generate_edit_plan_document(
         )
         document = EditPlanDocument.model_validate(result.data)
         document = document.model_copy(update={"source_video_id": video_id})
-        return ensure_valid_edit_plan(document, duration=duration)
+        return _finalize_edit_plan(
+            document,
+            duration=duration,
+            analysis=analysis,
+            prompt=prompt,
+        )
     except Exception:  # noqa: BLE001
         # Noisy AI output must not break vibe editing — heal with heuristic plan
         return _fallback()
