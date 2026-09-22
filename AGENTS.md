@@ -1,6 +1,8 @@
-# FastAPI AI Starter — Agent Instructions
+# Klyp Backend — Agent Instructions
 
-Generic **AI-first API** starter. Do not add product-specific business domains unless asked.
+**Product:** [Vibe Editing Agent](https://github.com/lecodeur228/Klyp-docs/blob/main/docs/01-product/vibe-editing-agent.md) (see `Klyp-docs`).
+
+Klyp-backend is the FastAPI heart of Klyp: analysis, EditPlan, creative/vibe-edit, render, credits.
 
 ## Architecture
 
@@ -9,6 +11,17 @@ Router → Service / Use case → Repository / Provider → Infrastructure
 ```
 
 AI lives under `app/ai/` (providers, prompts, services, usage). Never put RodiumAI HTTP calls in routers.
+
+Target domain (do not big-bang rewrite): `app/` modules for vibe agent (intent, planner, tools) composing existing editplan / creative / render.
+
+## Product rules (Vibe Agent)
+
+1. Prefer **FFmpeg** when the operation is deterministic (cut, silence, crop, zoom, concat).
+2. Use **RodiumAI** (`AIProvider`) for intent / structured EditPlan / prompts.
+3. Use **Higgsfield** only behind a future `VideoAIProvider` for generative video ops.
+4. Never execute AI-authored raw FFmpeg shell strings.
+5. Never destroy the original asset; version EditPlans.
+6. Estimate credits before costly generative jobs.
 
 ## API contract
 
@@ -32,7 +45,7 @@ AI lives under `app/ai/` (providers, prompts, services, usage). Never put Rodium
 
 ## Workflow
 
-1. Read these instructions + `.cursor/rules`
+1. Read these instructions + `.cursor/rules` + Klyp-docs vibe-editing-agent
 2. Change the correct layer
 3. Add tests
 4. Update docs if contract/env changes
