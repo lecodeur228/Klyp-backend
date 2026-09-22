@@ -148,6 +148,7 @@ class CreativePlanValidateRequest(BaseModel):
     captions_mode: CaptionStyle | None = None
     captions_position: CaptionPosition | None = None
     captions_scale: CaptionScale | None = None
+    aspect_ratio: AspectRatio | None = None
     overlay_layouts: list[OverlayLayoutPatch] = Field(default_factory=list)
 
 
@@ -186,6 +187,7 @@ class CreativePlanPublic(BaseModel):
     captions_mode: CaptionStyle = "dynamic"
     captions_position: CaptionPosition = "lower"
     captions_scale: CaptionScale = "md"
+    aspect_ratio: AspectRatio = "9:16"
     overlays: list[VisualOverlay] = Field(default_factory=list)
     timeline_segments: list[TimelineSegment] = Field(default_factory=list)
     zooms: list[CreativePlanZoom] = Field(default_factory=list)
