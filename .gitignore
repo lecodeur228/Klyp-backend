@@ -24,6 +24,7 @@ storage/*.db
 storage/*.db-*
 *.db
 *.sqlite3
+app/pipeline/sound_design/sfx_library/.cache/
 
 # IDE / OS
 .DS_Store
