@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import copy
 import logging
-from typing import Any
+from typing import Any, Literal
 from uuid import uuid4
 
 from sqlalchemy import select
@@ -18,15 +18,19 @@ from app.models.analysis import VideoAnalysis
 from app.models.asset import Asset
 from app.models.edit_plan import EditPlan
 from app.models.video import Video
+from app.pipeline.enrich import enrich_edit_plan
+from app.pipeline.transcription.qa_check import evaluate_sync_qa
 from app.schemas.editplan import (
     AudioConfig,
     CaptionPosition,
     CaptionScale,
     CaptionsConfig,
+    CreativePlanOverlayAddRequest,
     CreativePlanPublic,
     CreativePlanValidateRequest,
     CreativePlanZoom,
     EditPlanDocument,
+    MediaAssetUploadResponse,
     OutputConfig,
     Timeline,
     TimelineSegment,
@@ -38,8 +42,6 @@ from app.services.creative.cuts import (
     keep_tuples,
     source_to_output,
 )
-from app.pipeline.enrich import enrich_edit_plan
-from app.pipeline.transcription.qa_check import evaluate_sync_qa
 from app.services.videos import service as videos_service
 from app.storage import get_storage
 
@@ -467,7 +469,9 @@ def _migrate_monteur_layouts(plan: dict[str, Any]) -> tuple[dict[str, Any], bool
     return migrated, True
 
 
-def to_creative_public(row: EditPlan | None, *, video_id: str, project_id: str) -> CreativePlanPublic:
+def to_creative_public(
+    row: EditPlan | None, *, video_id: str, project_id: str
+) -> CreativePlanPublic:
     if not row:
         return CreativePlanPublic(
             video_id=video_id,
@@ -745,3 +749,118 @@ async def validate_creative_plan(
     await session.flush()
     await session.refresh(row)
     return to_creative_public(row, video_id=video.id, project_id=video.project_id)
+
+
+async def add_creative_overlay(
+    session: AsyncSession,
+    *,
+    user_id: str,
+    video_id: str,
+    body: CreativePlanOverlayAddRequest,
+    settings: Settings | None = None,
+) -> CreativePlanPublic:
+    """Append a ready overlay (uploaded asset or freshly generated image)."""
+    settings = settings or get_settings()
+    video, asset = await videos_service.get_owned_video(
+        session, user_id=user_id, video_id=video_id
+    )
+    row = await _get_plan_for_video(session, video_id=video_id)
+    if not row:
+        raise NotFoundException("Creative plan not found")
+
+    plan = EditPlanDocument.model_validate(row.plan or {"source_video_id": video_id})
+    duration = float(asset.duration) if asset.duration else 30.0
+    start = float(body.start) if body.start is not None else max(0.0, duration * 0.2)
+    end = float(body.end) if body.end is not None else min(duration, start + 3.0)
+    if end <= start:
+        end = min(duration, start + 2.0)
+
+    asset_url = (body.asset_url or "").strip() or None
+    if body.generate and not asset_url:
+        provider = build_provider(settings)
+        storage = get_storage(settings)
+        image = await provider.generate_image(
+            prompt=_enrich_image_prompt(body.prompt, layout=body.layout)
+        )
+        uploaded = await storage.save_media(
+            filename=f"gen-{uuid4().hex[:10]}.png",
+            content=image.content,
+            content_type=image.mime_type or "image/png",
+            folder=f"projects/{video.project_id}/overlays",
+        )
+        asset_url = uploaded.secure_url
+
+    if not asset_url:
+        raise ValidationException("asset_url required unless generate=true")
+
+    ov = VisualOverlay(
+        id=f"ov-user-{uuid4().hex[:8]}",
+        start=round(start, 3),
+        end=round(end, 3),
+        kind=_kind_for_layout(body.layout),  # type: ignore[arg-type]
+        layout=body.layout,
+        prompt=body.prompt.strip() or "User media",
+        status="ready",
+        asset_url=asset_url,
+    )
+    plan.overlays = list(plan.overlays) + [ov]
+    row.plan = plan.model_dump(mode="json")
+    row.status = "ready"
+    await session.flush()
+    await session.refresh(row)
+    return to_creative_public(row, video_id=video.id, project_id=video.project_id)
+
+
+async def upload_project_media(
+    session: AsyncSession,
+    *,
+    user_id: str,
+    video_id: str,
+    filename: str,
+    content: bytes,
+    content_type: str,
+    settings: Settings | None = None,
+) -> MediaAssetUploadResponse:
+    """Upload an image/video asset into the project media library folder."""
+    settings = settings or get_settings()
+    video, _asset = await videos_service.get_owned_video(
+        session, user_id=user_id, video_id=video_id
+    )
+    max_bytes = settings.storage_max_upload_mb * 1024 * 1024
+    if len(content) > max_bytes:
+        raise ValidationException(
+            "File too large",
+            errors={"file": [f"Max size is {settings.storage_max_upload_mb}MB"]},
+        )
+    ctype = (content_type or "application/octet-stream").lower()
+    if not (
+        ctype.startswith("image/")
+        or ctype.startswith("video/")
+        or ctype in {"image/png", "image/jpeg", "image/webp", "image/gif"}
+    ):
+        raise ValidationException(
+            "Unsupported file type",
+            errors={"file": ["Only images and videos are allowed"]},
+        )
+    storage = get_storage(settings)
+    uploaded = await storage.save_media(
+        filename=filename or "media.bin",
+        content=content,
+        content_type=ctype,
+        folder=f"projects/{video.project_id}/media",
+    )
+    kind: Literal["image", "video", "other"]
+    if ctype.startswith("video/"):
+        kind = "video"
+    elif ctype.startswith("image/"):
+        kind = "image"
+    else:
+        kind = "other"
+    return MediaAssetUploadResponse(
+        id=uploaded.public_id or str(uuid4()),
+        filename=filename or "media.bin",
+        content_type=ctype,
+        size=len(content),
+        secure_url=uploaded.secure_url,
+        kind=kind,
+    )
