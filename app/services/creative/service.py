@@ -29,6 +29,7 @@ from app.schemas.editplan import (
     CreativePlanPublic,
     CreativePlanValidateRequest,
     CreativePlanZoom,
+    CropOperation,
     EditPlanDocument,
     MediaAssetUploadResponse,
     OutputConfig,
@@ -494,6 +495,7 @@ def to_creative_public(
         captions_mode=plan.captions.style,
         captions_position=plan.captions.position,
         captions_scale=plan.captions.scale,
+        aspect_ratio=plan.output.aspect_ratio,
         overlays=plan.overlays,
         timeline_segments=list(plan.timeline.segments),
         zooms=zooms,
@@ -690,6 +692,23 @@ async def validate_creative_plan(
         plan.captions.position = body.captions_position
     if body.captions_scale:
         plan.captions.scale = body.captions_scale
+    if body.aspect_ratio:
+        plan.output.aspect_ratio = body.aspect_ratio
+        # Keep crop op in sync with the chosen export canvas.
+        ops = []
+        crop_seen = False
+        for op in plan.operations:
+            if getattr(op, "type", None) == "crop":
+                ops.append(op.model_copy(update={"aspect_ratio": body.aspect_ratio}))
+                crop_seen = True
+            else:
+                ops.append(op)
+        if not crop_seen:
+            ops.insert(
+                0,
+                CropOperation(aspect_ratio=body.aspect_ratio, mode="center"),
+            )
+        plan.operations = ops
 
     if body.overlay_layouts:
         by_id = {p.id: p.layout for p in body.overlay_layouts}

@@ -60,10 +60,11 @@ def _resolve_layout(layout: str) -> str:
     return "plate"
 
 
-def _scale_pad(width: int, height: int) -> str:
+def _scale_fill(width: int, height: int) -> str:
+    """Fill the export canvas (center crop) — CapCut-style, no letterbox."""
     return (
-        f"scale={width}:{height}:force_original_aspect_ratio=decrease,"
-        f"pad={width}:{height}:(ow-iw)/2:(oh-ih)/2"
+        f"scale={width}:{height}:force_original_aspect_ratio=increase,"
+        f"crop={width}:{height}"
     )
 
 
@@ -198,7 +199,7 @@ def build_ffmpeg_command(
 
     overlays = overlay_inputs or []
     out_dur = max(0.1, edited_duration(keeps))
-    scale = _scale_pad(width, height)
+    scale = _scale_fill(width, height)
 
     sfx_list: list[tuple[Path, float, float]] = []
     if getattr(plan.audio, "sfx_enabled", True):
