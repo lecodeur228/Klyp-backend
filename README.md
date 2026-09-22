@@ -1,6 +1,8 @@
-# FastAPI AI Starter
+# FastAPI — Klyp Backend
 
-Production-ready **API-only** template for AI-first backends. Compatible with the shared envelope used by Laravel / Adonis / Next.js starters.
+Cœur API de **Klyp** (Vibe Editing Agent) : analysis, EditPlan, vibe-edit, render, crédits.
+
+North star produit : `Klyp-docs/docs/01-product/vibe-editing-agent.md`
 
 ## Stack
 
@@ -8,6 +10,7 @@ Production-ready **API-only** template for AI-first backends. Compatible with th
 - SQLAlchemy 2 (async) + Alembic + PostgreSQL
 - Redis + Celery
 - RodiumAI provider (OpenAI-compatible) + FakeAIProvider for tests/CI
+- FFmpeg render pipeline
 - uv, Ruff, MyPy, Pytest
 - Docker Compose
 
