@@ -119,8 +119,20 @@ class EditPlanDocument(BaseModel):
     events: dict[str, Any] | None = None
 
 
+class AiEditAttachment(BaseModel):
+    """User-tagged media/SFX referenced from the vibe-edit chat."""
+
+    id: str = Field(min_length=1, max_length=120)
+    kind: Literal["image", "video", "sfx"] = "image"
+    url: str | None = Field(default=None, max_length=2000)
+    label: str | None = Field(default=None, max_length=200)
+    sfx_asset_id: str | None = Field(default=None, max_length=120)
+    category: str | None = Field(default=None, max_length=40)
+
+
 class AiEditRequest(BaseModel):
     prompt: str = Field(min_length=1, max_length=4000)
+    attachments: list[AiEditAttachment] = Field(default_factory=list, max_length=20)
 
 
 class AiEditStarted(BaseModel):
@@ -191,6 +203,9 @@ class CreativePlanPublic(BaseModel):
     overlays: list[VisualOverlay] = Field(default_factory=list)
     timeline_segments: list[TimelineSegment] = Field(default_factory=list)
     zooms: list[CreativePlanZoom] = Field(default_factory=list)
+    sfx_enabled: bool = True
+    sfx_count: int = 0
+    sfx_asset_ids: list[str] = Field(default_factory=list)
     validated: bool = False
 
 

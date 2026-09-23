@@ -120,6 +120,7 @@ async def ai_edit_video(
         user_id=user.id,
         video_id=video_id,
         prompt=body.prompt,
+        attachments=list(body.attachments or []),
         settings=settings,
     )
     return accepted_response(

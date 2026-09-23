@@ -139,7 +139,21 @@ def resolve_asset_path(asset_id: str) -> Path | None:
         return None
 
 
-def _pick_asset(category: SfxCategory, *, salt: float = 0.0) -> str | None:
+def _pick_asset(
+    category: SfxCategory,
+    *,
+    salt: float = 0.0,
+    preferred_ids: list[str] | None = None,
+) -> str | None:
+    preferred = preferred_ids or []
+    for pid in preferred:
+        asset = get_asset(pid)
+        if asset and asset.get("category") == category:
+            return pid
+    # Prefer any preferred id that exists even if category differs (user tagged)
+    for pid in preferred:
+        if get_asset(pid):
+            return pid
     assets = assets_for_category(category)
     if not assets:
         return None
@@ -156,35 +170,88 @@ def place_sfx_events(
     transitions: list[TransitionEvent] | None = None,
     relative_db: float = -5.0,
     dry_run: bool = False,
+    enabled: bool = True,
+    preferred_asset_ids: list[str] | None = None,
+    preferred_categories: list[SfxCategory] | None = None,
+    explicit_events: list[SfxEvent] | None = None,
 ) -> tuple[list[SfxEvent], dict[str, Any]]:
     """Only fire on important events; enforce 150ms cooldown + per-minute budget."""
+    if not enabled:
+        return [], {
+            "candidates": 0,
+            "placed": 0,
+            "budget_max": 0,
+            "cooldown_s": SFX_COOLDOWN_S,
+            "dry_run": dry_run,
+            "disabled": True,
+        }
+
+    if explicit_events:
+        # Honor LLM/user explicit placements (light validation)
+        placed = sorted(explicit_events, key=lambda e: e.start)
+        metrics = {
+            "candidates": len(placed),
+            "placed": len(placed),
+            "budget_max": len(placed),
+            "cooldown_s": SFX_COOLDOWN_S,
+            "dry_run": dry_run,
+            "explicit": True,
+        }
+        return placed, metrics
+
+    preferred_cats = preferred_categories or []
     candidates: list[tuple[float, SfxCategory, float]] = []
 
     for w in words:
         if w.important and w.emphasis:
-            candidates.append((w.start, "chime", w.score))
+            cat: SfxCategory = "chime"
+            if preferred_cats:
+                cat = preferred_cats[len(candidates) % len(preferred_cats)]
+            candidates.append((w.start, cat, w.score))
 
     for z in zooms:
         if z.important:
-            candidates.append((z.start, "riser", z.score))
+            cat = "riser"
+            if preferred_cats:
+                cat = preferred_cats[len(candidates) % len(preferred_cats)]
+            candidates.append((z.start, cat, z.score))
 
     for ov in overlays:
         if ov.important:
-            candidates.append((ov.start, "swipe", ov.score))
+            cat = "swipe"
+            if preferred_cats:
+                cat = preferred_cats[len(candidates) % len(preferred_cats)]
+            candidates.append((ov.start, cat, ov.score))
 
     for tr in transitions or []:
         if tr.kind != "cut" and tr.important:
-            candidates.append((tr.start, "whoosh", tr.score))
+            cat = "whoosh"
+            if preferred_cats:
+                cat = preferred_cats[len(candidates) % len(preferred_cats)]
+            candidates.append((tr.start, cat, tr.score))
+
+    # If user asked for a category but no candidates (quiet video), seed a few
+    if preferred_cats and not candidates and duration > 0.5:
+        step = max(1.5, duration / min(4, max(1, int(duration / 2))))
+        t = min(0.8, duration * 0.1)
+        while t < duration - 0.2 and len(candidates) < 4:
+            cat = preferred_cats[len(candidates) % len(preferred_cats)]
+            candidates.append((t, cat, 0.6))
+            t += step
 
     candidates.sort(key=lambda x: (-x[2], x[0]))
     max_n = max(1, int(round((duration / 60.0) * MAX_SFX_PER_MIN)))
+    if preferred_cats or preferred_asset_ids:
+        max_n = max(max_n, min(6, max_n + 2))
     placed: list[SfxEvent] = []
     for t, cat, score in candidates:
         if len(placed) >= max_n:
             break
         if any(abs(t - e.start) < SFX_COOLDOWN_S for e in placed):
             continue
-        asset_id = _pick_asset(cat, salt=t + len(placed) * 0.37)
+        asset_id = _pick_asset(
+            cat, salt=t + len(placed) * 0.37, preferred_ids=preferred_asset_ids
+        )
         placed.append(
             SfxEvent(
                 id=f"sfx-{uuid4().hex[:10]}",
@@ -206,5 +273,7 @@ def place_sfx_events(
         "cooldown_s": SFX_COOLDOWN_S,
         "dry_run": dry_run,
         "library_size": len(load_manifest().get("assets") or []),
+        "preferred_assets": len(preferred_asset_ids or []),
+        "preferred_categories": list(preferred_cats),
     }
     return placed, metrics
