@@ -21,8 +21,14 @@ from app.models.analysis import VideoAnalysis
 from app.models.asset import Asset
 from app.models.edit_plan import EditPlan
 from app.models.job import Job
+from app.pipeline.ai_edit.attachments import (
+    apply_ai_edit_attachments,
+    serialize_attachments,
+    timed_transcript,
+)
 from app.pipeline.enrich import enrich_edit_plan
 from app.schemas.editplan import (
+    AiEditAttachment,
     AiEditStarted,
     AudioConfig,
     CaptionsConfig,
@@ -39,6 +45,7 @@ from app.schemas.editplan import (
 from app.services.credits import service as credits_service
 from app.services.jobs import service as jobs_service
 from app.services.projects import service as projects_service
+from app.services.videos import service as videos_service
 
 _PACE_KEYS = (
     "rythme",
@@ -64,7 +71,6 @@ def _prompt_zoom_budget(prompt: str) -> float:
 
 def _prompt_wants_pace(prompt: str) -> bool:
     return any(k in prompt.lower() for k in _PACE_KEYS)
-from app.services.videos import service as videos_service
 
 JOB_TYPE_AI_EDIT = "ai_edit"
 
@@ -82,6 +88,7 @@ def build_fake_edit_plan(
     duration: float,
     vad_segments: list[dict[str, Any]] | None = None,
     prompt: str = "",
+    attachments: list[AiEditAttachment] | None = None,
 ) -> EditPlanDocument:
     """Deterministic EditPlan for tests / AI_PROVIDER=fake."""
     total = duration if duration and duration > 0 else 30.0
@@ -150,8 +157,8 @@ def build_fake_edit_plan(
     # Prompt hint: if user mentions denoise, enable it
     want_denoise = "denoise" in prompt.lower() or "bruit" in prompt.lower()
 
-    return EditPlanDocument(
-        schema_version="1.1.0",
+    plan = EditPlanDocument(
+        schema_version="1.5.0",
         source_video_id=source_video_id,
         timeline=Timeline(segments=segments),
         operations=operations,
@@ -163,8 +170,14 @@ def build_fake_edit_plan(
         ),
         visual_style="prism",
         overlays=[],
-        audio=AudioConfig(denoise=want_denoise or True, normalize=True),
+        audio=AudioConfig(denoise=want_denoise or True, normalize=True, sfx_enabled=True),
         output=OutputConfig(resolution="720p", aspect_ratio="9:16"),
+    )
+    return apply_ai_edit_attachments(
+        plan,
+        attachments=list(attachments or []),
+        prompt=prompt,
+        duration=total,
     )
 
 
@@ -285,9 +298,11 @@ async def start_ai_edit(
     user_id: str,
     video_id: str,
     prompt: str,
+    attachments: list[AiEditAttachment] | None = None,
     settings: Settings | None = None,
 ) -> AiEditStarted:
     settings = settings or get_settings()
+    atts = list(attachments or [])
     video, asset = await videos_service.get_owned_video(
         session, user_id=user_id, video_id=video_id
     )
@@ -341,6 +356,7 @@ async def start_ai_edit(
             "edit_plan_id": row.id,
             "prompt": prompt,
             "analysis_id": analysis.id,
+            "attachments": [a.model_dump(mode="json") for a in atts],
         },
         stage="queued",
         job_id=job_id,
@@ -355,6 +371,7 @@ async def start_ai_edit(
         asset=asset,
         analysis=analysis,
         prompt=prompt,
+        attachments=atts,
         settings=settings,
     )
 
@@ -371,8 +388,15 @@ def _finalize_edit_plan(
     duration: float,
     analysis: VideoAnalysis,
     prompt: str,
+    attachments: list[AiEditAttachment] | None = None,
 ) -> EditPlanDocument:
-    validated = ensure_valid_edit_plan(document, duration=duration)
+    with_atts = apply_ai_edit_attachments(
+        document,
+        attachments=list(attachments or []),
+        prompt=prompt,
+        duration=duration,
+    )
+    validated = ensure_valid_edit_plan(with_atts, duration=duration)
     return enrich_edit_plan(
         plan=validated,
         duration=duration,
@@ -394,7 +418,9 @@ async def generate_edit_plan_document(
     duration: float,
     analysis: VideoAnalysis,
     settings: Settings,
+    attachments: list[AiEditAttachment] | None = None,
 ) -> EditPlanDocument:
+    atts = list(attachments or [])
     if settings.ai_provider == "fake" or settings.app_env == "test":
         return _finalize_edit_plan(
             build_fake_edit_plan(
@@ -402,10 +428,12 @@ async def generate_edit_plan_document(
                 duration=duration,
                 vad_segments=list(analysis.vad_segments or []),
                 prompt=prompt,
+                attachments=atts,
             ),
             duration=duration,
             analysis=analysis,
             prompt=prompt,
+            attachments=atts,
         )
 
     def _fallback() -> EditPlanDocument:
@@ -415,20 +443,21 @@ async def generate_edit_plan_document(
                 duration=duration,
                 vad_segments=list(analysis.vad_segments or []),
                 prompt=prompt,
+                attachments=atts,
             ),
             duration=duration,
             analysis=analysis,
             prompt=prompt,
+            attachments=atts,
         )
 
     provider = build_provider(settings)
-    transcript_preview = ""
-    for seg in (analysis.segments or [])[:5]:
-        transcript_preview += f"- {seg.get('text', '')}\n"
-    vad_preview = str(analysis.vad_segments or [])[:500]
+    transcript_preview = timed_transcript(list(analysis.segments or []))
+    vad_preview = str(analysis.vad_segments or [])[:800]
     system, user_msg, _version = render_prompt(
         "edit_plan",
         prompt=prompt,
+        attachments=serialize_attachments(atts),
         duration=str(duration),
         transcript=transcript_preview or "(empty)",
         vad=vad_preview,
@@ -451,6 +480,7 @@ async def generate_edit_plan_document(
             duration=duration,
             analysis=analysis,
             prompt=prompt,
+            attachments=atts,
         )
     except Exception:  # noqa: BLE001
         # Noisy AI output must not break vibe editing — heal with heuristic plan
@@ -467,6 +497,7 @@ async def complete_ai_edit_inline(
     prompt: str,
     settings: Settings,
     user_id: str,
+    attachments: list[AiEditAttachment] | None = None,
 ) -> EditPlan:
     if job.status == "cancelled":
         edit_plan.status = "failed"
@@ -492,6 +523,7 @@ async def complete_ai_edit_inline(
             duration=duration,
             analysis=analysis,
             settings=settings,
+            attachments=attachments,
         )
         validated = ensure_valid_edit_plan(document, duration=duration)
         edit_plan.plan = validated.model_dump(mode="json")
@@ -540,7 +572,9 @@ async def enqueue_ai_edit(
     analysis: VideoAnalysis,
     prompt: str,
     settings: Settings,
+    attachments: list[AiEditAttachment] | None = None,
 ) -> Job:
+    atts = list(attachments or [])
     if settings.app_env == "test":
         await complete_ai_edit_inline(
             session,
@@ -551,6 +585,7 @@ async def enqueue_ai_edit(
             prompt=prompt,
             settings=settings,
             user_id=job.user_id,
+            attachments=atts,
         )
         return job
 
@@ -573,5 +608,6 @@ async def enqueue_ai_edit(
             prompt=prompt,
             settings=settings,
             user_id=job.user_id,
+            attachments=atts,
         )
         return job

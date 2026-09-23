@@ -11,12 +11,13 @@ from sqlalchemy.orm import sessionmaker
 
 from app.core.config import get_settings
 from app.core.constants import ErrorCode
-from app.editplan.validation import validate_edit_plan
+from app.editplan.validation import ensure_valid_edit_plan
 from app.models.analysis import VideoAnalysis
 from app.models.asset import Asset
 from app.models.edit_plan import EditPlan
 from app.models.job import Job
 from app.models.video import Video
+from app.pipeline.enrich import enrich_edit_plan
 from app.services.editplan.service import (
     AI_EDIT_STAGES,
     build_fake_edit_plan,
@@ -36,15 +37,36 @@ def _generate_document_sync(
     prompt: str,
     duration: float,
     analysis: VideoAnalysis,
+    attachments: list | None = None,
 ) -> object:
+    from app.schemas.editplan import AiEditAttachment
+
+    atts: list[AiEditAttachment] = []
+    for raw in attachments or []:
+        if isinstance(raw, dict):
+            try:
+                atts.append(AiEditAttachment.model_validate(raw))
+            except Exception:  # noqa: BLE001
+                continue
+
     if settings.ai_provider == "fake":
         document = build_fake_edit_plan(
             source_video_id=video_id,
             duration=duration,
             vad_segments=list(analysis.vad_segments or []),
             prompt=prompt,
+            attachments=atts,
         )
-        return validate_edit_plan(document, duration=duration)
+        document = ensure_valid_edit_plan(document, duration=duration)
+        return enrich_edit_plan(
+            plan=document,
+            duration=duration,
+            analysis_segments=list(analysis.segments or []),
+            global_subject=(prompt or "")[:120] or None,
+            art_direction="vibe-edit consistent palette",
+            needs_review=False,
+            dry_run=False,
+        )
 
     async def _run():
         engine = create_async_engine(settings.database_url, pool_pre_ping=True)
@@ -59,6 +81,7 @@ def _generate_document_sync(
                     duration=duration,
                     analysis=analysis,
                     settings=settings,
+                    attachments=atts,
                 )
         finally:
             await engine.dispose()
@@ -77,6 +100,7 @@ def run_ai_edit_job(self, job_id: str) -> dict[str, str]:  # type: ignore[no-unt
 
         edit_plan_id = (job.input_payload or {}).get("edit_plan_id")
         prompt = (job.input_payload or {}).get("prompt", "")
+        attachments = (job.input_payload or {}).get("attachments") or []
         edit_plan = None
         if edit_plan_id:
             edit_plan = session.execute(
@@ -124,6 +148,7 @@ def run_ai_edit_job(self, job_id: str) -> dict[str, str]:  # type: ignore[no-unt
                 prompt=prompt,
                 duration=duration,
                 analysis=analysis,
+                attachments=attachments if isinstance(attachments, list) else [],
             )
 
             edit_plan.plan = document.model_dump(mode="json")  # type: ignore[union-attr]

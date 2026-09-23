@@ -18,6 +18,7 @@ from app.models.analysis import VideoAnalysis
 from app.models.asset import Asset
 from app.models.edit_plan import EditPlan
 from app.models.video import Video
+from app.pipeline.ai_edit.attachments import sfx_summary
 from app.pipeline.enrich import enrich_edit_plan
 from app.pipeline.transcription.qa_check import evaluate_sync_qa
 from app.schemas.editplan import (
@@ -486,6 +487,7 @@ def to_creative_public(
         for op in plan.operations
         if getattr(op, "type", None) == "zoom"
     ]
+    sfx_count, sfx_ids = sfx_summary(plan)
     return CreativePlanPublic(
         video_id=video_id,
         project_id=project_id,
@@ -499,6 +501,9 @@ def to_creative_public(
         overlays=plan.overlays,
         timeline_segments=list(plan.timeline.segments),
         zooms=zooms,
+        sfx_enabled=bool(plan.audio.sfx_enabled),
+        sfx_count=sfx_count,
+        sfx_asset_ids=sfx_ids,
         validated=row.status in {"ready", "validated"},
     )
 

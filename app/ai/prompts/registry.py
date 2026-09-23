@@ -32,21 +32,29 @@ _REGISTRY: dict[str, PromptTemplate] = {
     ),
     "edit_plan": PromptTemplate(
         name="edit_plan",
-        version="1.0.0",
+        version="1.2.0",
         system=(
             "You are Klyp's video editing planner. Reply with a single JSON object "
             "matching the EditPlan schema only — never FFmpeg commands or shell. "
-            "Prefer removing silence (VAD), enabling captions, light zoom, and vertical output."
+            "Prefer removing silence (VAD), enabling captions, light zoom, and vertical output. "
+            "When user attachments are provided: "
+            "(1) image/video attachments MUST become overlays with the given asset_url "
+            "(status ready) — do not invent URLs and do not ask for a new image gen; "
+            "(2) sfx attachments or SFX requests set audio.sfx_enabled true and prefer "
+            "those asset_ids/categories in timed moments (cuts, zooms, emphasis); "
+            "(3) if the user asks to disable SFX, set audio.sfx_enabled false. "
+            "Never invent media URLs outside the attachment list."
         ),
         user_template=(
             "User request:\n{prompt}\n\n"
+            "User attachments (JSON — prefer these assets):\n{attachments}\n\n"
             "Source video id: {source_video_id}\n"
             "Duration seconds: {duration}\n"
-            "Transcript preview:\n{transcript}\n"
+            "Transcript (timed):\n{transcript}\n"
             "VAD silence segments:\n{vad}\n\n"
-            "Produce a valid EditPlan JSON with schema_version 1.1.0, "
-            "timeline.segments as keep ranges, operations, captions, visual_style, "
-            "overlays (optional), audio, output."
+            "Produce a valid EditPlan JSON with schema_version 1.5.0, "
+            "timeline.segments as keep ranges, operations (crop/zoom), captions, "
+            "visual_style, overlays (with asset_url when using attachments), audio, output."
         ),
         metadata={"tags": ["editplan", "klyp"], "owner": "product"},
     ),

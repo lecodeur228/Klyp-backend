@@ -4,6 +4,10 @@ from __future__ import annotations
 
 from typing import Any
 
+from app.pipeline.ai_edit.attachments import (
+    extract_explicit_sfx_events,
+    extract_sfx_prefs,
+)
 from app.pipeline.ai_edit.editorial_rules import (
     OverlaySpan,
     build_contextual_prompt,
@@ -34,6 +38,14 @@ def enrich_edit_plan(
     words = words_from_analysis_segments(analysis_segments)
 
     # Module 3 — editorial constraints on overlays
+    # Keep user-attached ready overlays with asset_url intact (don't rewrite prompt)
+    attached_ready = {
+        ov.id
+        for ov in plan.overlays
+        if ov.status == "ready"
+        and isinstance(ov.asset_url, str)
+        and ov.asset_url.startswith("http")
+    }
     spans = [
         OverlaySpan(
             id=ov.id,
@@ -52,6 +64,17 @@ def enrich_edit_plan(
     new_overlays: list[VisualOverlay] = []
     for span in filtered:
         base = by_id.get(span.id)
+        if base and base.id in attached_ready:
+            new_overlays.append(
+                base.model_copy(
+                    update={
+                        "start": span.start,
+                        "end": span.end,
+                        "layout": span.layout,
+                    }
+                )
+            )
+            continue
         prompt = build_contextual_prompt(
             local_phrase=span.prompt,
             global_subject=subject,
@@ -89,6 +112,11 @@ def enrich_edit_plan(
     zoom_ops = [
         ZoomOperation(start=z.start, end=z.end, scale=z.scale) for z in zooms
     ]
+    # Preserve non-zoom ops (crop) from the incoming plan
+    preserved = [
+        op for op in plan.operations if getattr(op, "type", None) != "zoom"
+    ]
+    operations = list(preserved) + zoom_ops
 
     overlay_events = [
         OverlayEvent(
@@ -104,6 +132,9 @@ def enrich_edit_plan(
         for ov in new_overlays
     ]
 
+    preferred_ids, preferred_cats = extract_sfx_prefs(plan)
+    explicit_sfx = extract_explicit_sfx_events(plan)
+
     # Module 4 — SFX on important events
     sfx_events, sfx_metrics = place_sfx_events(
         duration=duration,
@@ -112,13 +143,22 @@ def enrich_edit_plan(
         overlays=overlay_events,
         relative_db=plan.audio.sfx_relative_db,
         dry_run=dry_run,
+        enabled=bool(plan.audio.sfx_enabled),
+        preferred_asset_ids=preferred_ids or None,
+        preferred_categories=preferred_cats or None,
+        explicit_events=explicit_sfx or None,
     )
+
+    # Preserve vibe prefs bag across rebuild
+    vibe_bag = {}
+    if isinstance(plan.events, dict) and isinstance(plan.events.get("vibe"), dict):
+        vibe_bag = dict(plan.events["vibe"])
 
     draft = plan.model_copy(
         update={
             "schema_version": "1.5.0",
             "overlays": new_overlays,
-            "operations": zoom_ops,
+            "operations": operations,
         }
     )
     timeline = build_event_timeline(
@@ -144,7 +184,10 @@ def enrich_edit_plan(
     timeline = timeline.model_copy(update={"events": extra})
 
     data = draft.model_dump()
-    data["events"] = timeline.model_dump()
+    events_dump = timeline.model_dump()
+    if vibe_bag:
+        events_dump["vibe"] = vibe_bag
+    data["events"] = events_dump
     return EditPlanDocument.model_validate(data)
 
 

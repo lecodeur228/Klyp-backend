@@ -34,16 +34,18 @@ def test_prompt_registry() -> None:
     assert "Hello world" in user
     assert version == "1.0.0"
     edit = get_prompt("edit_plan")
-    assert edit.version == "1.0.0"
+    assert edit.version == "1.2.0"
     _, edit_user, _ = render_prompt(
         "edit_plan",
         prompt="cut silence",
+        attachments="[]",
         duration="10",
         transcript="hi",
         vad="[]",
         source_video_id="v1",
     )
     assert "cut silence" in edit_user
+    assert "attachments" in edit_user.lower() or "[]" in edit_user
     creative = get_prompt("creative_plan")
     assert creative.version == "1.4.0"
     _, creative_user, _ = render_prompt(
